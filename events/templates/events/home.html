@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Welcome</h1>
+
+{% if user.is_authenticated %}
+    <h2>Welcome {{ user.email }}</h2>
+    {% if user.is_organizer %}
+        <a href="{% url 'events:create_event' %}">Create Event</a>
+        <a href="{% url 'events:dashboard' %}">Dashboard</a>
+    {% else %}
+        <a href="{% url 'events:user_dashboard' %}">Dashboard</a>
+    {% endif %}
+    <p><a href="{% url 'account_logout' %}">Log out</a></p>
+{% else %}
+    <h2>You are not logged in</h2>
+    <p>Please login</p>
+{% endif %}
+
+<h2>Options</h2>
+<ul>
+    {% if not user.is_authenticated %}
+        <li><a href="{% url 'account_signup' %}">Signup</a></li>
+        <li><a href="{% url 'account_login' %}">Login</a></li>
+    {% endif %}
+    <li><a href="{% url 'account_reset_password' %}">Reset Password</a></li>
+</ul>
+{% endblock %}

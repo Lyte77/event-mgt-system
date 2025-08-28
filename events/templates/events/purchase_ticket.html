@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Purchase Ticket</h2>
+<p>Event: {{ event.title }}</p>
+<p>Ticket Type: {{ ticket_type.name }}</p>
+<p>Price: ${{ ticket_type.price }}</p>
+<p>Available: {{ ticket_type.quantity_available }}</p>
+
+
+<form action="" method="post">
+    {% csrf_token %}
+    <label for="quantity">Quantity:</label>
+    <input type="number" name="quantity" min="1" max="
+    {{ ticket_type.quantity_available }}" value="1">
+    <button type="submit">Reserve Ticket</button>
+</form>
+{% endblock %}

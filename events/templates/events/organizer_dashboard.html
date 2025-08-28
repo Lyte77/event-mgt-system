@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Hello {{ user.email }}</h1>
+<p>Your dashboard</p>
+
+<a href="{% url 'events:create_event' %}">Create Event</a>
+
+    <p>Total events:{{ total_events }}</p>
+    <p>Upcoming events:{{ upcoming_events }}</p>
+    <p>Past events:{{ past_events }}</p>
+
+    <h1>Your events</h1>
+     {% for event in events %}
+     <ul>
+        <li> {{ event.title }}</li>
+        <a href="{% url 'events:update_event' event.slug %}">Update</a>
+        <a href="{% url 'events:delete_event' event.slug %}">Delete</a>
+
+     </ul>
+       
+     {% endfor %}
+{% endblock %}

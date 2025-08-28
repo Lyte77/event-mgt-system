@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Welcome</h1>
+<h1>Hello {{ user.email}}</h1>
+
+<h3>Upcoming tickets</h3>
+{% for ticket in upcoming_tickets %}
+    <p>{{ ticket.event.title }}- {{ ticket.ticket_type }} - {{ ticket.payment_status }}</p>
+{% empty %}
+    <p>No upcoming tickets</p>
+{% endfor %}
+
+<h3>Past Tickets</h3>
+{% for ticket in past_tickets %}
+    <p>{{ ticket.event.title }}- {{ ticket.ticket_type }} - {{ ticket.payment_status }}</p>
+    <p>{{ ticket.event.start_time }} - {{ ticket.event.end_time }}</p>
+{% empty %}
+    <p>No past tickets</p>
+{% endfor %}
+
+{% endblock %}

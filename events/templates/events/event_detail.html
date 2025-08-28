@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<p>Title: {{ event.title }}</p>
+<p> Description {{ event.description }}</p>
+<p> Location {{ event.venue }}</p>
+<p>Start Time {{ event.start_time }}</p>
+<p>End  Time {{ event.end_time }}</p>
+<p>Status {{ event.status }} </p>
+
+<p>Ticket Type: {% for ticket in ticket_type %} 
+    <ul>
+        <li>
+            
+            {{ ticket.name }}
+            {{ ticket.price }}
+            {{ ticket.quantity_available }}
+
+            <form action="{% url 'events:purchase_ticket' event.id ticket.id %}" 
+            method="post">
+                    {% csrf_token %}
+                    <input type="number" name="quantity" min="1" max="{{ ticket.quantity_available}}
+                    " value="1">
+                    <button type="submit">Buy {{ ticket.name }}</button>
+        </form>
+
+        </li>
+    </ul>
+    
+     {% endfor %}</p>
+
+
+
+
+{% endblock %}

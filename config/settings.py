@@ -44,13 +44,13 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
 
-     'tailwind',
-     'theme',
+  
+     
 ]
 
 SITE_ID = 1
-TAILWIND_APP_NAME = 'theme'
-NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
+# TAILWIND_APP_NAME = 'theme'
+# NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
 
 
 MIDDLEWARE = [
@@ -135,6 +135,9 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

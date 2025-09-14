@@ -1,18 +1,29 @@
-{% load static tailwind_tags %}
+{% load static  %}
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" x-data="{ sidebarOpen: false, createEventModal: false, editEventModal: false, createTicketModal: false, activeEvent: null }">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.gstatic.com"/>
     <link href="https://fonts.cdnfonts.com/css/general-sans?styles=135312,135310,135313,135303" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="css/tailwind/tailwind.min.css"/>
+    
+    <link rel="stylesheet" href="{% static  'css/output.css' %}">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.0/dist/alpine.min.js" defer></script>
+  <!-- HTMX v1: -->
+  <script src="https://unpkg.com/htmx.org@1.9.2"></script> 
+  <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    
+
+    <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/submit-json.js"></script>
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.png"/>
     <title>Document</title>
-       {% tailwind_css %}
+    
 </head>
-<body class="bg-black">
+<body class="  bg-gray-50 antialiased  x-cloak">
     {% block content %}
     {% endblock %}
 

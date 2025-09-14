@@ -2,16 +2,26 @@ from django.shortcuts import render,get_object_or_404,redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
+
 from django.utils.timezone import now
 from django.http import HttpResponseForbidden
 from .models import Event, TicketType, Ticket
-from .forms import EventForm
+from django.db.models import Sum, Count,Q
+from .forms import EventForm,TicketTypeForm,TicketTypeFormSet
 import uuid
+
+
 
 # Create your views here.
 
 def homepage(request):
-    return render(request, 'events/home.html')
+    events = Event.objects.filter(is_published=True)
+    upcoming_events = Event.objects.filter(status='upcoming')
+
+
+    context = {'events':events,
+               'upcoming_events': upcoming_events}
+    return render(request, 'events/home.html',context)
 
 def event_list(request):
     events = Event.objects.filter(is_published=True,status="upcoming")
@@ -34,16 +44,24 @@ def create_event(request):
         return redirect('events:event_list')
     
     if request.method == 'POST':
-        form = EventForm(request.POST)
-        if form.is_valid():
+        form = EventForm(request.POST, request.FILES)
+        formset = TicketTypeFormSet(request.POST)
+        if form.is_valid() and formset.is_valid():
             event = form.save(commit=False)
             event.organizer = request.user
             event.save()
+            formset.instance = event
+            formset.save()
+            print("submitted")
             messages.success(request,"Event created successfully")
-            return redirect('events:event_detail',slug=event.slug)
+            return redirect('events:dashboard')
+            
+        # return redirect('events:event_detail',slug=event.slug)
     else:
         form = EventForm()
-    context = {'form':form}
+        formset = TicketTypeFormSet()
+    context = {'form':form,
+               'formset':formset}
     return render(request, 'events/create_event.html',context)
 
 @login_required
@@ -74,27 +92,59 @@ def organizer_dashboard(request):
     if not request.user.is_organizer:
         return redirect('events:home')
     
-    events = Event.objects.filter(organizer=request.user)
-    upcoming_events = events.filter(start_time__gte=timezone.now()).count()
-    past_events = events.filter(start_time__lt=timezone.now()).count()
+    organizer = request.user
+    events = (
+        Event.objects.filter(organizer=organizer)
+        .annotate(
+            total_tickets=Count("tickets"),
+            paid_tickets=Count("tickets", filter=Q(tickets__payment_status="paid")),
+            unpaid_tickets=Count("tickets", filter=Q(tickets__payment_status="pending")),
+        )
+    )
+   
     total_events = events.count()
-
-    context = {'events': events,
-               'total_events':total_events,
-               'upcoming_events':upcoming_events,
-               'past_events':past_events}
+    upcoming_events = events.filter(start_time__gte=now()).count()
+    past_events = events.filter(start_time__lt=now()).count()
+    # tickets = TicketType.objects.filter(organizer=event)
+    
+  
+    context = {
+         "total_events": total_events,
+        "upcoming_events": upcoming_events,
+        "past_events": past_events,
+        "events": events,
+            }
 
     return render(request, 'events/organizer_dashboard.html',context)
 
 @login_required
 def user_dashboard(request):
     tickets = Ticket.objects.filter(user=request.user)
+     
 
+    total_tickets = tickets.count()
+    
+
+    
+    total_upcoming_events = Ticket.objects.upcoming_for_user(request.user).count()
+    upcoming_events = Ticket.objects.upcoming_for_user(request.user)
+    past_events = Ticket.objects.past_for_user(request.user)
+    total_past_events = Ticket.objects.past_for_user(request.user).count()
     upcoming_tickets = tickets.filter(event__start_time__gte=now()).order_by('event__start_time')
     past_tickets = tickets.filter(event__start_time__lt=now()).order_by('event__start_time')
 
     context = {'upcoming_tickets':upcoming_tickets,
-               'past_tickets':past_tickets}
+               'upcoming_events':upcoming_events,
+               'past_events':past_events,
+               'total_upcoming_events':total_upcoming_events,
+               'total_past_events':total_past_events,
+               'total_tickets':total_tickets,
+               'tickets':tickets,
+               'past_tickets':past_tickets,
+               
+               }
+    
+
     return render(request,'events/user_dashboard.html', context)
 
 
@@ -111,7 +161,7 @@ def redirect_after_login(request):
         return redirect('events:home')
     return redirect('accounts:login')
 
-        
+@login_required        
 def purchase_ticket(request,event_id,ticket_type_id):
     event = get_object_or_404(Event, id=event_id)
     ticket_type = get_object_or_404(TicketType,id=ticket_type_id,event=event)
@@ -135,7 +185,8 @@ def purchase_ticket(request,event_id,ticket_type_id):
             unique_code=str(uuid.uuid4())[:8]
 
         )
-        messages.success(request,f"Ticket reserved! Complete payment to confirm")
+        messages.success(request,f" {ticket_type.name } Ticket reserved! Complete payment to confirm")
+        print(f" {ticket_type.name } Ticket reserved! Complete payment to confirm")
         return redirect("events:user_dashboard")
     
     context = {'event':event,

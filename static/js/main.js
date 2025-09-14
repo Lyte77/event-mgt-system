@@ -1,3 +1,48 @@
+
+  const navbar = document.getElementById("navbar");
+  const menuToggle = document.getElementById("menuToggle");
+  const mobileMenu = document.getElementById("mobileMenu");
+  const menuIcon = document.getElementById("menuIcon");
+  const closeIcon = document.getElementById("closeIcon");
+  const scrollTopBtn = document.getElementById("scrollTopBtn");
+
+  // Change navbar style on scroll
+  // window.addEventListener("scroll", () => {
+  //   if (window.scrollY > 10) {
+  //     navbar.classList.add("bg-white/80", "backdrop-blur-md", "shadow-sm");
+  //     navbar.classList.remove("bg-transparent");
+  //   } else {
+  //     navbar.classList.remove("bg-white/80", "backdrop-blur-md", "shadow-sm");
+  //     navbar.classList.add("bg-transparent");
+  //   }
+  // });
+
+  // Toggle mobile menu
+  menuToggle.addEventListener("click", () => {
+    const isOpen = !mobileMenu.classList.contains("translate-x-full");
+    if (isOpen) {
+      mobileMenu.classList.add("opacity-0", "translate-x-full", "pointer-events-none");
+      menuIcon.classList.remove("hidden");
+      closeIcon.classList.add("hidden");
+      document.body.style.overflow = "";
+    } else {
+      mobileMenu.classList.remove("opacity-0", "translate-x-full", "pointer-events-none");
+      menuIcon.classList.add("hidden");
+      closeIcon.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+    }
+  });
+
+  // Smooth scroll to top
+  scrollTopBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    mobileMenu.classList.add("opacity-0", "translate-x-full", "pointer-events-none");
+    menuIcon.classList.remove("hidden");
+    closeIcon.classList.add("hidden");
+    document.body.style.overflow = "";
+  });
+
 // Animate numbers on scroll
   function animateCounter(el, target) {
     let start = 0;
@@ -41,4 +86,47 @@
     }, { threshold: 0.2 });
 
     steps.forEach(step => observer.observe(step));
+  });
+
+
+
+function dashboard(){
+    return {
+      sidebarOpen: false,
+      profileModal: false,
+      pastOpen: true,
+      ticketFilter: 'all',
+      ticketModal: { open: false, id: null },
+      feedbackModal: { open: false, eventId: null, title: '' },
+
+      openTicketModal(id){
+        this.ticketModal.id = id;
+        this.ticketModal.open = true;
+      },
+      closeTicketModal(){
+        this.ticketModal.open = false;
+        this.ticketModal.id = null;
+      },
+
+      openProfileModal(){ this.profileModal = true; },
+      openFeedbackModal(id, title){
+        this.feedbackModal.eventId = id;
+        this.feedbackModal.title = title;
+        this.feedbackModal.open = true;
+      },
+      closeFeedbackModal(){
+        this.feedbackModal = { open: false, eventId: null, title: '' };
+      },
+
+      matchesFilter(scope, filter){
+        if(filter === 'all') return true;
+        return scope === filter;
+      }
+    }
+  }
+
+  // Follow HX-Redirect header for downloads
+  document.body.addEventListener('htmx:afterOnLoad', (evt) => {
+    const redirect = evt.detail.xhr.getResponseHeader('HX-Redirect');
+    if (redirect) window.location.href = redirect;
   });

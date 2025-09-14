@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 import uuid
 from django.utils.text import slugify
+from .managers import TicketManager
 
 class Event(models.Model):
     STATUS_CHOICES = [
@@ -15,10 +16,11 @@ class Event(models.Model):
     organizer = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='organized_events')
     title = models.CharField(max_length=200)
     description = models.TextField()
+    event_image = models.ImageField(upload_to='event_pics/',null=True,blank=True)
     venue = models.CharField(max_length=255,blank=True,null=True)
     online_link = models.URLField(blank=True,null=True)
     start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    end_time = models.DateTimeField(blank=True,null=True)
     capacity = models.PositiveIntegerField(null=True,blank=True)
     ticket_price = models.DecimalField(max_digits=10,decimal_places=2,default=0.00)
     status = models.CharField(max_length=20,choices=STATUS_CHOICES,default="draft")
@@ -75,6 +77,8 @@ class Ticket(models.Model):
     payment_status = models.CharField(max_length=100,choices=PAYMENT_STATUS_CHOICES,default="pending")
     unique_code = models.CharField(max_length=100,unique=True,editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    objects = TicketManager()
 
     def save(self,*args,**kwargs):
         if not self.unique_code:

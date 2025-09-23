@@ -1,0 +1,116 @@
+{% extends 'base.html' %} 
+{% block content %}
+
+<div class="flex flex-col min-h-screen">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#ff5500" fill-opacity="1" d="M0,256L120,234.7C240,213,480,171,720,144C960,117,1200,107,1320,101.3L1440,96L1440,0L1320,0C1200,0,960,0,720,0C480,0,240,0,120,0L0,0Z"></path></svg>
+  <main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="max-w-2xl mx-auto">
+      <div class="mb-8">
+        <h2 class="text-3xl font-bold text-orange-600 ">Create Event</h2>
+        <p class="text-orange-600 dark:text-orange-600 mt-1">Fill in the basic information for your event and add your ticket type and prices.</p>
+      </div>
+      <form class="space-y-6" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+        <div>
+          <label class="block text-sm font-medium text-orange-600  mb-1" for="event-title">Event
+            ID</label>
+              {{ form.id }}
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-orange-600  mb-1" for="event-title">Event
+            Title</label>
+              {{ form.title }}
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-orange-600  mb-1"
+            for="description">Description</label>
+               {{ form.description }}
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-orange-600  mb-1" for="location">Location</label>
+              {{ form.venue }}
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-orange-600  mb-1" for="start-time">Start
+              Time</label>
+                {{ form.start_time }}
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-orange-600  mb-1" for="end-time">End
+              Time</label>
+                {{ form.end_time }}
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-orange-600  mb-1">Event Image</label>
+          <div
+            class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-zinc-300 dark:border-zinc-700 border-dashed rounded-lg">
+            <div class="space-y-1 text-center">
+              <span class="material-symbols-outlined text-5xl text-zinc-400 dark:text-zinc-500">image</span>
+              <div class="flex text-sm text-zinc-600 dark:text-zinc-400">
+                <label
+                  class="relative cursor-pointer bg-background-light dark:bg-background-dark rounded font-medium text-primary hover:text-primary/80 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary"
+                  for="file-upload">
+                  <span>Upload a file</span>
+                 
+                </label>
+                 
+                <p class="pl-1">or drag and drop</p>
+              </div>
+              
+              <p class="text-xs text-zinc-500 dark:text-zinc-500">PNG, JPG, GIF up to 10MB</p>
+                {{ form.event_image }}
+            </div>
+           
+          </div>
+        </div>
+
+         {{ formset.management_form }}
+
+         <div class="ticket-form border rounded p-4 relative" data-form-index="{{ forloop.counter0 }}">
+              {% for form in formset %}
+            
+              <div class="grid grid-cols-3 gap-4">
+                <div>
+                  <label class="block text-sm">Name</label>
+                  {{ form.name }}
+                  {{ form.name.errors }}
+                </div>
+                <div>
+                  <label class="block text-sm">Price</label>
+                  {{ form.price }}
+                  {{ form.price.errors }}
+                </div>
+                <div>
+                  <label class="block text-sm">Quantity</label>
+                  {{ form.quantity_available }}
+                  {{ form.quantity_available.errors }}
+                </div>
+              </div>
+
+            {% endfor %}
+            </div>
+
+            {% if form.errors %}
+              <div class="bg-red-100 text-red-600 p-3 rounded-lg mb-4" >
+                <ul>
+                  {% for field, errors in form.errors.items %}
+                    <li><strong>{{ field }}:</strong>{{ errors|join:", "}}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endif %}
+
+            <div class="flex justify-end pt-4">
+          <button type="submit"
+            class="rounded-full bg-orange-600 px-6 py-3 md:px-8 md:py-4 text-base md:text-lg font-semibold text-white shadow-lg hover:bg-opacity-90 transition-all transform hover:scale-105">
+           Create Event </button>
+            </div>
+          </form>
+    </div>
+  </main>
+</div>
+
+
+{% endblock %}

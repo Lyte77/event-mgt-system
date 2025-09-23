@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+  <div class="w-full max-w-md bg-white rounded-lg shadow-md p-6 space-y-6">
+    <!-- Title -->
+    <h2 class="text-2xl font-bold text-center text-orange-600">{% trans "Sign In" %}</h2>
+
+    <!-- Login Form -->
+    <form method="post" action="{% url 'account_login' %}" class="space-y-4">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+
+      <!-- Email -->
+      <div>
+        <label for="id_login" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+        {{ form.login }}
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label for="id_password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+        {{ form.password }}
+      </div>
+
+      <!-- Remember Me -->
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          {{ form.remember }}
+          <label for="id_remember" class="ml-2 block text-sm text-gray-700">Remember me</label>
+        </div>
+        <a href="{% url 'account_reset_password' %}" class="text-sm text-orange-600 hover:underline">
+          Forgot password?
+        </a>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit"
+        class="w-full py-2 px-4 bg-orange-600 text-white rounded-md font-medium hover:bg-orange-700 transition">
+        {% trans "Sign In" %}
+      </button>
+    </form>
+
+    <!-- Divider -->
+    <div class="flex items-center">
+      <div class="flex-grow border-t border-gray-300"></div>
+      <span class="px-2 text-sm text-gray-500">or</span>
+      <div class="flex-grow border-t border-gray-300"></div>
+    </div>
+
+    <!-- Google Login -->
+    {% providers_media_js %}
+    {% if socialaccount_providers.google %}
+    <a href="{% provider_login_url 'google' %}"
+      class="w-full py-2 px-4 border border-gray-300 rounded-md flex items-center justify-center space-x-2 hover:bg-gray-50 transition">
+      <img src="https://www.svgrepo.com/show/355037/google.svg" alt="Google" class="w-5 h-5">
+      <span class="text-sm font-medium text-gray-700">Sign in with Google</span>
+    </a>
+    {% endif %}
+
+    <!-- No account yet -->
+    <p class="text-center text-sm text-gray-600">
+      {% trans "Don't have an account?" %}
+      <a href="{% url 'account_signup' %}" class="text-orange-600 font-medium hover:underline">{% trans "Sign up" %}</a>
+    </p>
+  </div>
+</div>
+
+{% endblock %}

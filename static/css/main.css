@@ -1,3 +1,26 @@
-.nav-link {
-    @apply text-gray-700 font-medium hover:text-indigo-600 transition-colors;
-  }
+
+        :root {
+            --brand-accent: #ff5500;
+        }
+        
+        /* Enhanced backdrop blur for better glass effect */
+        .navbar-blur {
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            background: rgba(255, 255, 255, 0.85);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Smooth transition for navbar background */
+        .navbar-transition {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Alternative dark blur effect - uncomment to use */
+        .navbar-dark-blur {
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            background: rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+ 

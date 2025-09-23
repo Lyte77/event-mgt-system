@@ -2,374 +2,182 @@
 {% load static %}
 {% block content %}
 
+{% include 'events/partials/navbar.html' %}
 
-<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden"
+  style='font-family: "Space Grotesk", "Noto Sans", sans-serif;'>
+  <div class="layout-container flex h-full grow flex-col">
 
-  <!-- HERO / HEADER -->
-  <article class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-    <!-- Hero image -->
-    <figure class="relative lg:col-span-7 overflow-hidden rounded-2xl shadow-lg">
-      <img alt="AfroTech Live hero — speakers and audience" src="{{ event.event_image.url }}" class="w-full h-64 sm:h-72 md:h-96 object-cover transform transition-all duration-700 will-change-transform" style="transform-origin:center;" loading="lazy" />
-      <!-- overlay tags -->
-      <div class="absolute left-4 top-4 flex gap-2">
-        <span class="bg-black/60 text-white text-xs px-3 py-1 rounded-full">Tech</span>
-        <span class="bg-black/60 text-white text-xs px-3 py-1 rounded-full">Conference</span>
-        <span class="bg-black/60 text-white text-xs px-3 py-1 rounded-full">Networking</span>
-      </div>
-      <!-- subtle badge -->
-      <figcaption class="absolute right-4 bottom-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full text-sm font-medium shadow">
-        Capacity: <span class="font-semibold">1000</span> · Sold: <span class="font-semibold">372</span>
-      </figcaption>
-    </figure>
-
-    <!-- Hero meta & buy panel -->
-    <header class="lg:col-span-5 space-y-4">
-      <div class="space-y-2">
-        <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold leading-tight tracking-tight">
-          {{ event.title }}
-        </h1>
-
-        <div class="flex items-start gap-3 text-sm text-gray-700">
-          <div class="flex items-center gap-2">
-            <svg class="w-5 h-5 text-pink-600" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <time datetime="2025-10-25">{{ event.start_time }}</time>
-            <span class="mx-1">•</span>
-            <span>9:00 AM — 6:00 PM (WAT)</span>
-          </div>
-        </div>
-
-        <div class="text-sm text-gray-600 flex items-center gap-2">
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s8-4.5 8-10a8 8 0 10-16 0c0 5.5 8 10 8 10z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          {{ event.venue }}
-        </div>
-
-        <p class="text-sm text-gray-700">
-          Hosted by <a href="" class="underline font-medium text-pink-600">{{ event.organizer }}</a>. 
-        </p>
-        <p class="text-sm text-gray-700">
-          Status:{{ event.status }}
-        </p>
-      </div>
-
-      <!-- Ticket CTA panel -->
-      <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm" x-data="ticketPanel()" x-init="init()" @keydown.window.escape="closeModal()" >
-        <!-- summary -->
-        <div class="flex items-center justify-between gap-3">
-          <div>
-            <div class="text-sm text-gray-500">Tickets</div>
-            <div class="font-semibold text-lg">Buy your seat — secure pricing ends soon</div>
-          </div>
-          <div class="text-right">
-            <div class="text-xs text-gray-500">Total</div>
-            <div class="text-lg font-bold">₦<span x-text="formatCurrency(total)"></span></div>
-          </div>
-        </div>
-          {% for ticket_type in ticket_type.all %}
-        <ul class="mt-4 space-y-3">
-          <!-- Ticket: Early Bird -->
-          <li class="flex items-center justify-between gap-3 p-3 rounded-lg border border-gray-100">
-            <div class="flex-1 min-w-0">
-              
-              <div class="flex items-center gap-2">
-                <strong>{{ ticket_type.name }}</strong>
-                <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full">Expires Sep 30, 2025</span>
-                <span class="ml-2 text-xs text-gray-500">{{ ticket_type.quantity_available }}</span>
+    <main class="flex-1">
+      <div class="mx-auto max-w-7xl py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+          <div class="lg:col-span-2">
+            <div class="mb-6 lg:mb-8 overflow-hidden rounded-lg shadow-lg">
+              <div class="bg-cover bg-center flex flex-col justify-end min-h-[300px] sm:min-h-[400px]"
+                style='background-image: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 50%), url("{{ event.event_image.url }}");'>
+                <div class="p-4 sm:p-8">
+                  <h1 class="text-white text-3xl sm:text-4xl font-bold leading-tight tracking-tight">
+                    {{ event.title }}</h1>
+                </div>
               </div>
-              <div class="text-sm text-gray-500">Great value — secure a seat early</div>
             </div>
-
-            <div class="flex items-center gap-3">
-              <div class="text-sm font-semibold">{{ ticket_type.price }}</div>
-              <!-- quantity selector -->
-             
-
-             <form method="POST" action="{% url 'events:purchase_ticket' event.id ticket_type.id %}">
-                {% csrf_token %}
-                <label for="quantity">Quantity:</label>
-                <input class="w-12 text-center border rounded"  type="number" name="quantity" min="1" max="{{ ticket_type.available_quantity }}" value="1">
-                <button type="submit" class="ml-2 inline-flex items-center gap-2 px-3 py-2 rounded-md bg-pink-600 text-white text-sm hover:bg-pink-700 transition">Reserve Ticket</button>
-            </form>
+            <div class="space-y-8 lg:space-y-12">
+              <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sm:p-8">
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">Event Details
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 sm:gap-x-8 gap-y-4 sm:gap-y-6 text-base sm:text-lg">
+                  <div class="flex items-center gap-3 sm:gap-4">
+                    <span
+                      class="material-symbols-outlined text-2xl sm:text-3xl text-[var(--brand-accent)]">calendar_today</span>
+                    <div>
+                      <p class="font-bold text-gray-900">Date</p>
+                      <p class="text-gray-600">{{ event.start_time }}</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3 sm:gap-4">
+                    <span
+                      class="material-symbols-outlined text-2xl sm:text-3xl text-[var(--brand-accent)]">schedule</span>
+                    <div>
+                      <p class="font-bold text-gray-900">Time</p>
+                      <p class="text-gray-600">{{ event.start_time }}</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3 sm:gap-4">
+                    <span
+                      class="material-symbols-outlined text-2xl sm:text-3xl text-[var(--brand-accent)]">location_on</span>
+                    <div>
+                      <p class="font-bold text-gray-900">Venue</p>
+                      <p class="text-gray-600">{{ event.venue }}</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3 sm:gap-4">
+                    <span
+                      class="material-symbols-outlined text-2xl sm:text-3xl text-[var(--brand-accent)]">groups</span>
+                    <div>
+                      <p class="font-bold text-gray-900">Capacity</p>
+                      <p class="text-gray-600">5,000 attendees</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3 sm:gap-4 col-span-full">
+                    <span
+                      class="material-symbols-outlined text-2xl sm:text-3xl text-[var(--brand-accent)]">category</span>
+                    <div>
+                      <p class="font-bold text-gray-900">Category</p>
+                      <p class="text-gray-600">Technology &amp; Innovation</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <section>
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">About the
+                  Event</h2>
+                <p class="text-base sm:text-lg text-gray-600 leading-relaxed">
+                  {{ event.description }}
+                </p>
+              </section>  
+              <section>
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">Venue Location
+                </h2>
+                <div class="overflow-hidden rounded-lg shadow-md">
+                  <div class="w-full bg-center bg-no-repeat aspect-video bg-cover"
+                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC5wYa2h0SbjAh_ME3sM5qg1wuXD6qiY8QjajF7mqEHpvZ-BTLkmcgLpzRrF0W2-cKI2eraEeFPDR2OfTIf2eNkP_tW0yucMr2m9j5-sANhaMfZwCm8lF5hta4CC0X8B73E4FauPxif0D3R39e9cq1wsgkW6qbcf-lkbHuth16_-okEKa8V9rFUthGIM0zr0gHDttKo4bYDl8RTvD9nBtrnAeG_m7VpekuXFntKpLY-7kqpDaPkCN6fqblX2WgLFwzLPbPUdwxLG0TD");'>
+                  </div>
+                </div>
+              </section>
+              <section>
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">Policies</h2>
+                <p class="text-base sm:text-lg text-gray-600 leading-relaxed">
+                  Tickets are non-refundable. Attendees must be 18 years or older. Please bring a
+                  valid ID for entry. The event organizers reserve the right to refuse entry or
+                  remove any person behaving inappropriately. By purchasing a ticket, you agree to
+                  these terms and conditions.
+                </p>
+              </section>
+              <section>
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">About the
+                  Organizer</h2>
+                <div
+                  class="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 rounded-lg bg-white p-6 shadow-sm border border-gray-200">
+                  <div
+                    class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-20 w-20 sm:h-24 sm:w-24 flex-shrink-0"
+                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD8ts_eeCKIcXu8iPI0Y_9uP-u7aXy2ROWS80bAVxgPf1qdxrHfcFAMDedDKjOw62mP4kYsb-sTxFJ3a2LcmUO_VNq5C-5YHEPwn9y2xBQcvfEmNsckc66KXj9TEzFPbyG003ifpY5xGiWVLonUFgOIRQoLyQNH-ggAvTrDK8yqgWrad-MHsfL8SArP0o_j3zU_ZX5epi7vXIn1-smDmKreKcVyWwrT5crFQcErUoTNEJ93GBHt8LLPijJTipnbkHN_uIzlS2BR7Hys");'>
+                  </div>
+                  <div class="text-center sm:text-left">
+                    <p class="text-xl sm:text-2xl font-bold text-gray-900">{{ event.organizer }}.
+                    </p>
+                    <p class="text-sm sm:text-base text-gray-500 mt-1">Organizing innovative
+                      tech events since 2010</p>
+                  </div>
+                </div>
+              </section>
             </div>
-          </li>
-
-          
-
-         
-          
-        </ul>
-        {% endfor %}
-
-        <!-- fallback non-JS link -->
-        <noscript class="block mt-3">
-          <a href="" class="inline-block w-full text-center px-4 py-2 rounded-md bg-pink-600 text-white">Buy tickets (non-JS)</a>
-        </noscript>
-
-        <!-- visual live total (mobile) -->
-        <div class="mt-4 text-sm text-gray-600">Selected total: ₦<span x-text="formatCurrency(total)"></span></div>
-      </div>
-
-      <!-- share & calendar -->
-      <div class="flex gap-3 mt-3">
-        <button @click="navigatorShare()" class="inline-flex items-center gap-2 px-3 py-2 rounded-md border border-gray-200 bg-white text-sm" aria-label="Share event">
-          Share
-        </button>
-
-        <a href="" class="inline-flex items-center gap-2 px-3 py-2 rounded-md border border-gray-200 bg-white text-sm" download>
-          Add to Calendar
-        </a>
-      </div>
-
-    </header>
-  </article>
-
-  <div class="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <!-- MAIN CONTENT (left) -->
-    <section class="lg:col-span-2 space-y-6">
-
-      <!-- Description -->
-      <section class="bg-white rounded-2xl p-5 shadow-sm" aria-labelledby="desc-title">
-        <header class="flex items-center justify-between">
-          <h2 id="desc-title" class="text-lg font-semibold">About the event</h2>
-          <div class="text-sm text-gray-500">Hosted by {{ event.organizer }}</div>
-        </header>
-
-        <div class="mt-4 prose prose-sm max-w-none text-gray-700">
-          <p><strong>{{ event.title }}</strong> 
-            {{ event.description }}
-          </p>
-
-       
-
-          <p class="text-sm text-gray-600">Capacity & safety: We follow venue safety standards. Bags may be checked. See policies below for entry & refund rules.</p>
-        </div>
-
-        <!-- read-more (collapsible) -->
-        <div class="mt-4" x-data="{ open:false }">
-          <button class="text-sm text-pink-600 underline" @click="open = !open" :aria-expanded="open.toString()">
-            <span x-show="!open">Read more</span>
-            <span x-show="open">Show less</span>
-          </button>
-
-          <div x-show="open" x-collapse class="mt-3 text-gray-700">
-            <p>Workshops require separate sign up in some cases — check the session details during checkout. Travel stipends are not included. For accessibility needs, email <a href="mailto:hello@devrise.co" class="underline">hello@devrise.co</a>.</p>
           </div>
-        </div>
-      </section>
+          <div class="lg:col-span-1">
+            <div class="sticky top-12 space-y-6">
+              <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Tickets</h2>
 
-      <!-- Schedule -->
-     
-      <!-- FAQ & Policies -->
-      <section class="bg-white rounded-2xl p-5 shadow-sm" aria-labelledby="faq-title">
-        <div class="flex items-center justify-between">
-          <h3 id="faq-title" class="text-lg font-semibold">FAQ & Policies</h3>
-          <div class="text-sm text-gray-500">Questions answered</div>
-        </div>
-
-        <dl class="mt-4 space-y-3">
-          <div x-data="{ open:false }" class="border border-gray-100 rounded-lg p-3">
-            <dt class="flex items-center justify-between">
-              <button @click="open = !open" :aria-expanded="open.toString()" class="text-left w-full flex items-center gap-3">
-                <span class="font-medium">What is the refund policy?</span>
-                <svg :class="{'rotate-180': open}" class="w-4 h-4 ml-auto transition-transform" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </button>
-            </dt>
-            <dd x-show="open" x-collapse class="mt-2 text-gray-600">
-              Refunds allowed within 7 days of purchase; after that only credit may be issued. Event cancellations will result in full refunds.
-            </dd>
-          </div>
-
-          <div x-data="{ open:false }" class="border border-gray-100 rounded-lg p-3">
-            <dt class="flex items-center justify-between">
-              <button @click="open = !open" :aria-expanded="open.toString()" class="text-left w-full flex items-center gap-3">
-                <span class="font-medium">Is there ID or ticket check at entry?</span>
-                <svg :class="{'rotate-180': open}" class="w-4 h-4 ml-auto transition-transform" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </button>
-            </dt>
-            <dd x-show="open" x-collapse class="mt-2 text-gray-600">
-              Yes — please bring a government ID. Tickets are transferable (contact organizer) but cannot be resold on-site.
-            </dd>
-          </div>
-
-          <div class="mt-3 text-sm text-gray-600">
-            <strong>Entry policy:</strong>
-            <ul class="list-disc pl-5 mt-2">
-              <li>No large bags; subject to security checks.</li>
-              <li>Follow venue code of conduct; harassment will result in removal.</li>
-            </ul>
-          </div>
-        </dl>
-      </section>
-
-      <!-- Related events (lazy loaded) -->
-      <section class="bg-white rounded-2xl p-5 shadow-sm" aria-labelledby="related-title" >
-        <h3 id="related-title" class="text-lg font-semibold">You may also like</h3>
-        <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3" hx-get="/events/123/related" hx-trigger="revealed" hx-swap="innerHTML" >
-          <!-- fallback content for non-js or while loading -->
-          <div class="p-3 rounded-lg border border-gray-100">
-            <div class="font-medium">Loading related events…</div>
-          </div>
-        </div>
-      </section>
-
-    </section>
-
-    <!-- SIDEBAR (right) -->
-    <aside class="space-y-6 lg:col-span-1">
-      <!-- Venue card -->
-      <div class="bg-white rounded-2xl p-4 shadow-sm">
-        <h4 class="font-semibold">Venue</h4>
-        <div class="mt-3 text-sm text-gray-700">
-          <div class="font-medium">Lagos Convention Center</div>
-          <div class="text-gray-500">Victoria Island, Lagos</div>
-          <div class="mt-2 text-sm">Capacity: <span class="font-semibold">1000</span></div>
-        </div>
-
-        <div class="mt-3">
-          <!-- Map embed placeholder -->
-          <div class="w-full h-40 rounded-md overflow-hidden border border-gray-100">
-            <iframe title="Lagos Convention Center map" src="https://www.openstreetmap.org/export/embed.html?bbox=3.4200%2C6.4270%2C3.4230%2C6.4290&amp;layer=mapnik" class="w-full h-full" loading="lazy"></iframe>
-          </div>
-          <a class="text-sm underline block mt-2" href="https://www.google.com/maps/search/?api=1&query=6.4281,3.4214" target="_blank" rel="noopener">Open in Maps</a>
-        </div>
-      </div>
-
-      <!-- Organizer card -->
-      <div id="organizer" class="bg-white rounded-2xl p-4 shadow-sm">
-        <div class="flex items-center gap-3">
-          <img src="https://images.unsplash.com/photo-1542744095-291d1f67b221?w=200&q=60&auto=format&fit=crop" alt="DevRise Collective logo" class="w-12 h-12 rounded-full object-cover"/>
-          <div>
-            <div class="font-semibold">DevRise Collective</div>
-            <div class="text-xs text-gray-500">Community org focused on developer growth across Africa.</div>
-          </div>
-        </div>
-
-        <p class="mt-3 text-sm text-gray-600">DevRise organizes meetups and career programs designed to connect African dev talent with global opportunities.</p>
-
-        <div class="mt-3 flex gap-2">
-          <a href="" class="inline-flex items-center gap-2 px-3 py-2 rounded-md border border-gray-200 text-sm">Profile</a>
-          <button class="inline-flex items-center gap-2 px-3 py-2 rounded-md border border-gray-200 text-sm" @click="$dispatch('open-contact')" aria-haspopup="dialog">Contact</button>
-        </div>
-      </div>
-
-      <!-- Tags -->
-      <div class="bg-white rounded-2xl p-4 shadow-sm">
-        <h4 class="font-semibold">Tags</h4>
-        <div class="mt-3 flex flex-wrap gap-2">
-          <a href="" class="px-2 py-1 text-xs rounded bg-gray-100">Tech</a>
-          <a href="" class="px-2 py-1 text-xs rounded bg-gray-100">Conference</a>
-          <a href="" class="px-2 py-1 text-xs rounded bg-gray-100">Career</a>
-          <a href="" class="px-2 py-1 text-xs rounded bg-gray-100">Networking</a>
-        </div>
-      </div>
-    </aside>
-  </div>
-
-  <!-- PURCHASE MODAL (Alpine + HTMX) -->
-  <!-- <div x-data="modal()" x-show="open" x-trap.noscroll="open" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4" aria-hidden="true">
-    <div class="fixed inset-0 bg-black/40" @click="close()" aria-hidden="true"></div>
-
-    <div role="dialog" aria-modal="true" aria-labelledby="modal-title" class="relative bg-white rounded-lg shadow-xl max-w-lg w-full p-5" @keydown.escape.window="close()">
-      <header class="flex items-start justify-between gap-4">
-        <h3 id="modal-title" class="text-lg font-semibold" x-text="title">Purchase</h3>
-        <button @click="close()" class="text-gray-500" aria-label="Close purchase dialog">✕</button>
-      </header>
-
-      <div class="mt-4" id="modal-body">
-
-        <form id="purchase-form" hx-post="" hx-trigger="submit" hx-include="#purchase-form" hx-target="#modal-body" hx-swap="innerHTML" @submit.prevent>
-          <input type="hidden" name="ticket_type" :value="selectedType" x-bind:value="selectedType"/>
-          <input type="hidden" name="quantity" :value="quantity" x-bind:value="quantity"/>
-
-          <div class="text-sm text-gray-700">
-            <p><strong x-text="selectedType"></strong> — Qty: <span x-text="quantity"></span></p>
-            <p class="mt-2">Line total: ₦<span x-text="formatCurrency(lineTotal)"></span></p>
-          </div>
-
-          <div class="mt-4 space-y-3">
-            <label class="block text-sm">
-              <span class="text-gray-700">Full name</span>
-              <input name="buyer_name" class="mt-1 block w-full rounded border px-3 py-2" required />
-            </label>
-
-            <label class="block text-sm">
-              <span class="text-gray-700">Email</span>
-              <input name="buyer_email" type="email" class="mt-1 block w-full rounded border px-3 py-2" required />
-            </label>
-
-            <div class="text-xs text-gray-500">Payment handled by your configured gateway. This form only initiates a purchase request.</div>
-          </div>
-
-          <div class="mt-4 flex items-center justify-end gap-3">
-            <button type="button" class="px-3 py-2 rounded-md border" @click="close()">Cancel</button>
-            <button type="submit" class="px-4 py-2 rounded-md bg-pink-600 text-white">Confirm & Pay</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div> -->
-
-  <!-- CONTACT ORGANIZER MODAL (HTMX) -->
-  <!-- <div x-data="{ open:false }" x-on:open-contact.window="open=true" x-show="open" x-cloak class="fixed inset-0 z-40 flex items-center justify-center p-4">
-    <div class="fixed inset-0 bg-black/40" @click="open=false"></div>
-    <div role="dialog" aria-modal="true" class="relative bg-white rounded-lg shadow-xl max-w-md w-full p-5">
-      <header class="flex items-center justify-between">
-        <h4 class="font-semibold">Contact DevRise Collective</h4>
-        <button @click="open=false" aria-label="Close contact dialog">✕</button>
-      </header>
-
-      <div class="mt-3">
-        <form hx-post="/organizers/devrise/contact" hx-target="this" hx-swap="outerHTML" @submit.prevent>
-          <label class="block text-sm">
-            <span class="text-gray-700">Your name</span>
-            <input name="name" required class="mt-1 block w-full rounded border px-3 py-2" />
-          </label>
-          <label class="block text-sm mt-3">
-            <span class="text-gray-700">Message</span>
-            <textarea name="message" required class="mt-1 block w-full rounded border px-3 py-2" rows="4"></textarea>
-          </label>
-
-          <div class="mt-4 flex justify-end gap-3">
-            <button type="button" @click="open=false" class="px-3 py-2 rounded border">Cancel</button>
-            <button type="submit" class="px-4 py-2 rounded bg-pink-600 text-white">Send</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div> -->
-
-</main>
-
-
-
-
-
-<p>Title: {{ event.title }}</p>
-<p> Description {{ event.description }}</p>
-<p> Location {{ event.venue }}</p>
-<p>Start Time {{ event.start_time }}</p>
-<p>End  Time {{ event.end_time }}</p>
-<p>Status {{ event.status }} </p>
-
-<p>Ticket Type: {% for ticket in ticket_type %} 
-    <ul>
-        <li>
-            
-            {{ ticket.name }}
-            {{ ticket.price }}
-            {{ ticket.quantity_available }}
-
-            <form action="{% url 'events:purchase_ticket' event.id ticket.id %}" 
-            method="post">
+              <div class="space-y-4">
+                {% for ticket in ticket_type %}
+                <div
+                  class="flex flex-col gap-4 rounded-lg border border-gray-200 bg-white p-4 sm:p-6 shadow-sm transition-all hover:shadow-lg hover:border-[var(--brand-accent)]">
+                  <div class="flex items-center justify-between">
+                    <h3 class="text-lg sm:text-xl font-bold text-gray-900">{{ ticket.name }}</h3>
+                    <p
+                      class="text-white text-xs sm:text-sm font-semibold rounded-full bg-[var(--brand-accent)] px-3 py-1">
+                      Limited</p>
+                  </div>
+                  <span class="text-gray-900 text-4xl sm:text-5xl font-extrabold">{{ ticket.price }}</span>
+                  <ul class="space-y-2 text-sm sm:text-base text-gray-600">
+                    <li class="flex items-center gap-3">
+                      <svg class="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path clip-rule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          fill-rule="evenodd"></path>
+                      </svg>
+                      Access to all sessions
+                    </li>
+                    <li class="flex items-center gap-3">
+                      <svg 2000="" class="h-5 w-5 text-green-500" fill="currentColor" http:="" svg"=""
+                        viewBox="0 0 20 20" www.w3.org="" xmlns="http=">
+                        <path clip-rule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          fill-rule="evenodd"></path>
+                      </svg>
+                      Networking events
+                    </li>
+                  </ul>
+                  <form action="{% url 'events:purchase_ticket' event.id ticket.id %}" method="post">
                     {% csrf_token %}
-                    <input type="number" name="quantity" min="1" max="{{ ticket.quantity_available}}
+                    <input class=" appearance-none border border-gray-400 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="number" name="quantity" min="1" max="{{ ticket.quantity_available}}
                     " value="1">
-                    <button type="submit">Buy {{ ticket.name }}</button>
-        </form>
+                    <button type="submit" class="w-full flex items-center justify-center rounded-md h-10 sm:h-12 px-6 bg-gray-200 text-gray-800 text-sm sm:text-base font-bold hover:bg-[var(--brand-accent)] transition-colors">Buy {{ ticket.name }}</button>
+                  </form>
+                
+                </div>
+                {% endfor %}
 
-        </li>
-    </ul>
-    
-     {% endfor %}</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

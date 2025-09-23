@@ -2,6 +2,7 @@ from django.shortcuts import render,get_object_or_404,redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
+from django.core.cache import cache
 
 from django.utils.timezone import now
 from django.http import HttpResponseForbidden
@@ -44,17 +45,23 @@ def create_event(request):
         return redirect('events:event_list')
     
     if request.method == 'POST':
-        form = EventForm(request.POST, request.FILES)
-        formset = TicketTypeFormSet(request.POST)
-        if form.is_valid() and formset.is_valid():
-            event = form.save(commit=False)
-            event.organizer = request.user
-            event.save()
-            formset.instance = event
-            formset.save()
-            print("submitted")
-            messages.success(request,"Event created successfully")
-            return redirect('events:dashboard')
+        try:
+            form = EventForm(request.POST, request.FILES)
+            formset = TicketTypeFormSet(request.POST)
+            if form.is_valid() and formset.is_valid():
+                event = form.save(commit=False)
+                event.organizer = request.user
+                event.save()
+                formset.instance = event
+                formset.save()
+                print("submitted")
+                messages.success(request,"Event created successfully")
+                return redirect('events:dashboard')
+            else:
+                print(form.errors)
+                print(formset.errors)
+        except:
+            print("Cant submit form")
             
         # return redirect('events:event_detail',slug=event.slug)
     else:
@@ -67,14 +74,22 @@ def create_event(request):
 @login_required
 def event_update(request,slug):
     event = get_object_or_404(Event,slug=slug,organizer=request.user)
+    
     if request.method == 'POST':
-        form = EventForm(request.POST,instance=event)
-        if form.is_valid():
+        form = EventForm(request.POST, request.FILES,instance=event)
+        formset = TicketTypeFormSet(request.POST,instance=event)
+        if form.is_valid() and formset.is_valid():
             form.save()
+            formset.save()
             return redirect('events:dashboard')
+        else:
+                print(form.errors)
+                print(formset.errors)
     else:
         form = EventForm(instance=event)
-    context = {'form':form }
+        formset = TicketTypeFormSet(instance=event)
+    context = {'form':form,
+               'formset':formset }
     return render(request, 'events/create_event.html',context)
 
 
@@ -103,15 +118,19 @@ def organizer_dashboard(request):
     )
    
     total_events = events.count()
-    upcoming_events = events.filter(start_time__gte=now()).count()
-    past_events = events.filter(start_time__lt=now()).count()
+    upcoming_events = events.filter(start_time__gte=now())
+    total_upcoming_events = events.filter(start_time__gte=now()).count()
+    past_events = events.filter(start_time__lt=now())
+    total_past_events = events.filter(start_time__lt=now()).count()
     # tickets = TicketType.objects.filter(organizer=event)
     
   
     context = {
          "total_events": total_events,
-        "upcoming_events": upcoming_events,
-        "past_events": past_events,
+         "past_events":past_events,
+         "upcoming_events": upcoming_events,
+        "total_upcoming_events": total_upcoming_events,
+        "total_past_events": total_past_events,
         "events": events,
             }
 

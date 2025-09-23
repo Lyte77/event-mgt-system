@@ -1,40 +1,40 @@
 from django import forms
 from django.forms import inlineformset_factory
 from .models import Event, TicketType
+from django.utils.timezone import now
 
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ['title','description','event_image','venue','start_time','capacity']
+        fields = ['title','description','event_image','venue','start_time', 'end_time', 'capacity']
         exclude = ['organizer','status']
 
         widgets = {
             'title':forms.TextInput(attrs={
-                'class':'form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition',
+                'class':'w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2  focus:outline-none',
                 'placeholder':'Enter event title'
             }),
 
             'description':forms.Textarea(attrs={
-                'class':'form-textarea w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition',
+                'class':'w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2  focus:outline-none',
                 'placeholder':'Describe your event in details'
             }),
 
-            'event_image':forms.ClearableFileInput(attrs={
-                'class':'block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:border-indigo-500 focus:ring-indigo-500',
-                'placeholder':'Click to upload your event image'
+            "event_image": forms.ClearableFileInput(attrs={
+                "class": "w-full px-4 py-2 rounded-lg border border-gray-300 bg-white cursor-pointer focus:ring-2  focus:outline-none",
             }),
 
             'venue':forms.TextInput(attrs={
-                'class':'form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition',
+                'class':'w-full px-4 py-2 rounded-lg border border-gray-300  focus:outline-none',
                 'placeholder':'Enter event Venue'
             }),
-            'start_time': forms.DateTimeInput(attrs={
-                "type":"datetime-local",
-                "class":"form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition",
-        }),
-            'end_time': forms.DateTimeInput(attrs={
-                "type":"datetime-local",
-                "class":"fform-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition",
+              "start_time": forms.DateTimeInput(attrs={
+                "class": "w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2  focus:outline-none",
+                "type": "datetime-local"
+            }),
+            "end_time": forms.DateTimeInput(attrs={
+                "class": "w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2  focus:outline-none",
+                "type": "datetime-local"
         }),
             'capacity':forms.NumberInput(attrs={
                 'class':'form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition',
@@ -42,6 +42,23 @@ class EventForm(forms.ModelForm):
 
             })
         }
+
+
+
+    def clean(self):
+        """ Custom validation for event times """
+        cleaned_data = super().clean()
+        start_time = cleaned_data.get("start_time")
+        end_time = cleaned_data.get("end_time")
+
+        if start_time and start_time < now():
+            self.add_error("start_time", "Start time cannot be in the past.")
+
+        if start_time and end_time and end_time <= start_time:
+            self.add_error("end_time", "End time must be after the start time.")
+
+        return cleaned_data
+
 
 class TicketTypeForm(forms.ModelForm):
     class Meta:
@@ -69,5 +86,5 @@ class TicketTypeForm(forms.ModelForm):
 TicketTypeFormSet = inlineformset_factory(Event
                                           ,TicketType,
                                           form=TicketTypeForm,
-                                          extra=1,
+                                          extra=4,
                                           can_delete=True)

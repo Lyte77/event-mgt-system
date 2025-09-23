@@ -155,6 +155,13 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+
+ACCOUNT_EMAIL_SUBJECT_PREFIX = "[Evently] "
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3
+ACCOUNT_SIGNUP_REDIRECT_URL = "/"
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "/"
+ACCOUNT_EMAIL_CONFIRMATION_COOLDOWN = 60
+
 LOGIN_REDIRECT_URL = "events:redirect_after_login"
 LOGOUT_REDIRECT_URL = "/"
 
@@ -162,5 +169,7 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # ACCOUNT_SIGNUP_FORM_CLASS =  'accounts.forms.CustomSignupForm'
 
-ACCOUNT_FORMS = {'signup': 'accounts.forms.CustomSignupForm' }
+ACCOUNT_FORMS = {'signup': 'accounts.forms.CustomSignupForm',
+                 "login": "accounts.forms.CustomLoginForm", }
+
 

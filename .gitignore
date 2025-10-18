@@ -8,3 +8,15 @@ wheels/
 
 # Virtual environments
 .venv
+.env
+*env
+
+staticfiles/
+mediafiles/
+
+logs/
+*.log
+
+# IDE/editor configs
+.vscode/
+.idea/

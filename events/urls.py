@@ -6,6 +6,7 @@ app_name = 'events'
 
 urlpatterns = [
     path('',views.homepage,name='home'),
+    path('dashboard_router/',views.dashboard_router,name='dashboard_router'),
     path('dashboard/', views.organizer_dashboard,name='dashboard'),
     path('user_dashboard/',views.user_dashboard,name='user_dashboard'),
     path('profile/',views.profile,name='profile'),

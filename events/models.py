@@ -22,11 +22,11 @@ class Event(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField(blank=True,null=True)
     capacity = models.PositiveIntegerField(null=True,blank=True)
-    ticket_price = models.DecimalField(max_digits=10,decimal_places=2,default=0.00)
-    status = models.CharField(max_length=20,choices=STATUS_CHOICES,default="draft")
+   
+    status = models.CharField(max_length=20,choices=STATUS_CHOICES,default="upcoming",db_index=True)
     slug = models.SlugField(unique=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    is_published = models.BooleanField(default=True)
+    is_published = models.BooleanField(default=True, db_index=True)
     updated_at = models.DateTimeField(auto_now_add=True)
 
     def save(self,*args,**kwargs):

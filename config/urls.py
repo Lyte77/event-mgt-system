@@ -22,8 +22,15 @@ from django.urls import path,include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/',include("allauth.urls")),
+    path('profile/', include('accounts.urls',namespace='accounts')),
     path('',include('events.urls',namespace='events'))
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+    urlpatterns += [
+        path('__reload__/', include('django_browser_reload.urls')),
+    ]
+    urlpatterns += [
+        path("__debug__/", include('debug_toolbar.urls')),
+    ]

@@ -16,7 +16,7 @@ import uuid
 # Create your views here.
 
 def homepage(request):
-    events = Event.objects.filter(is_published=True)
+    events = Event.objects.filter(is_published=True)[:4]
     upcoming_events = Event.objects.filter(status='upcoming')
 
 
@@ -100,7 +100,13 @@ def delete_event(request,slug):
     return redirect('events:dashboard')
         
     
-   
+    
+def dashboard_router(request):
+    if request.user.is_authenticated:
+        if request.user.is_organizer:
+            return redirect('events:dashboard')
+        else:
+            return redirect('events:user_dashboard')
 
 @login_required
 def organizer_dashboard(request):
@@ -189,8 +195,9 @@ def purchase_ticket(request,event_id,ticket_type_id):
         quantity = int(request.POST.get('quantity',1))
 
         if not ticket_type.has_availability(quantity):
+            print("Not enough tickets")
             messages.error(request, "Not enough tickets available")
-            return redirect("events:event_detail",event_id=event.id)
+            return redirect('events:user_dashboard') 
         
         ticket_type.quantity_available -= quantity
         ticket_type.save()

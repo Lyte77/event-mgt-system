@@ -1,15 +1,15 @@
 
+{% load static %}
 
-
-<div class="relative flex  w-full flex-col overflow-x-hidden" x-data="{ sidebarOpen: false }">
+<div class="relative flex sticky top-0 z-30 w-full flex-col overflow-x-hidden" x-data="{ sidebarOpen: false }">
         <!-- Mobile Sidebar -->
         <aside :class="{ 'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen }" class="fixed top-0 left-0 z-40 h-screen w-64 bg-white shadow-lg transition-transform md:hidden transform" id="sidebar">
             <div class="p-6">
-                <a class="flex items-center gap-2 text-xl font-bold text-gray-900" href="#">
-                    <svg class="h-7 w-7 text-[var(--brand-accent)]" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2L2 7V17L12 22L22 17V7L12 2ZM12 4.13L19.95 8L12 11.87L4.05 8L12 4.13ZM4 9.17V15.84L11 19.48V12.81L4 9.17ZM13 19.48L20 15.84V9.17L13 12.81V19.48Z"></path>
-                    </svg>
-                    <span class="tracking-tighter">Evently</span>
+                <a class="flex items-center gap-2 text-xl font-bold text-gray-900" href="{% url 'events:home' %}">
+                    <!-- <img src="{% static 'images/logo.png' %}" 
+                        alt="Eventura Logo"
+                        class="h-10 w-auto object-contain" /> -->
+                    <span class="tracking-tighter">Eventura</span>
                 </a>
                 <nav class="mt-8 flex flex-col gap-4">
                     <a class="text-sm font-medium text-gray-600 hover:text-[var(--brand-accent)] transition-colors" href="#">Browse Events</a>
@@ -17,10 +17,14 @@
                     <a class="text-sm font-medium text-gray-600 hover:text-[var(--brand-accent)] transition-colors" href="#">Help Center</a>
                     <hr class="my-4"/>
                     {% if request.user.is_authenticated %}
-                        <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all" href="{% url 'events:dashboard' %}">Dashboard</a>
+                            {% if request.user.is_organizer %}
+                                <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all" href="{% url 'events:dashboard' %}">Dashboard</a>
+                            {% else %}
+                                 <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all" href="{% url 'events:user_dashboard' %}">Dashboard</a>
+                            {% endif %}
                     {% else %}
                             <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all" href="{% url 'account_login' %}">Log In</a>
-                            <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all text-center" href="{% url 'account_signup' %}">Sign Up</a>
+                            <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all text-center" href="{% url 'account_signup' %}?=next{% url 'accounts:profile_onboarding' %}">Sign Up</a>
                     {% endif %}
                 </nav>
             </div>
@@ -30,17 +34,21 @@
         <div @click="sidebarOpen = false" class="fixed inset-0 z-30 bg-black/50 md:hidden" x-cloak x-show="sidebarOpen"></div>
 
         <!-- Enhanced Sticky Header with Better Blur -->
-        <header class="sticky top-0 z-20 w-full navbar-blur navbar-transition">
+        <header class="sticky top-0 z-30 w-full navbar-blur navbar-transition">
             <div class="container mx-auto px-4 sm:px-6 py-4">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-10">
-                        <a class="flex items-center gap-2 text-xl font-bold text-gray-900" href="#">
-                            <svg class="h-7 w-7 text-[var(--brand-accent)]" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 2L2 7V17L12 22L22 17V7L12 2ZM12 4.13L19.95 8L12 11.87L4.05 8L12 4.13ZM4 9.17V15.84L11 19.48V12.81L4 9.17ZM13 19.48L20 15.84V9.17L13 12.81V19.48Z"></path>
-                            </svg>
-                            <span class="tracking-tighter">Evently</span>
+                         <div class="flex items-center gap-3">
+                    <!-- <img src="{% static 'images/logo.png' %}" alt="Eventura Logo"
+                        class="h-1/2 sm:h-14 md:h-16 w-auto object-contain" /> -->
+                        <a href="{% url 'events:home'%}">
+                                <span class="text-2xl sm:text-3xl font-extrabold text-orange-600 tracking-tight">
+                                Eventura
+                    </span>
                         </a>
-                        <nav class="hidden md:flex items-center gap-8">
+                    
+                    </div>
+                            <nav class="hidden md:flex items-center gap-8">
                             <a class="text-sm font-medium text-gray-600 hover:text-[var(--brand-accent)] transition-colors" href="#">Browse Events</a>
                             <a class="text-sm font-medium text-gray-600 hover:text-[var(--brand-accent)] transition-colors" href="#">Create an Event</a>
                             <a class="text-sm font-medium text-gray-600 hover:text-[var(--brand-accent)] transition-colors" href="#">Help Center</a>
@@ -49,10 +57,14 @@
                     <div class="flex items-center gap-4">
                         <div class="hidden md:flex items-center gap-4">
                     {% if request.user.is_authenticated %}
-                        <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all" href="{% url 'events:dashboard' %}">Dashboard</a>
+                            {% if request.user.is_organizer %}
+                                <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all" href="{% url 'events:dashboard' %}">Dashboard</a>
+                            {% else %}
+                                 <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all" href="{% url 'events:user_dashboard' %}">Dashboard</a>
+                            {% endif %}
                     {% else %}
                             <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all" href="{% url 'account_login' %}">Log In</a>
-                            <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all text-center" href="{% url 'account_signup' %}">Sign Up</a>
+                            <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all text-center" href="{% url 'account_signup' %}?=next{% url 'accounts:profile_onboarding' %}">Sign Up</a>
                     {% endif %}
                         </div>
                         <button @click.stop="sidebarOpen = !sidebarOpen" class="md:hidden p-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[var(--brand-accent)]">

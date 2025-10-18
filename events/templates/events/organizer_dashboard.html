@@ -6,310 +6,344 @@
 
 {% include "events/partials/create_event_modal.html" with modal_id="createEventModal" title="Create Event" %}
 <style>
-       :root {
-            --brand-primary: #ff5500;
-            --background-light: #f8f9fa;
-            --background-white: #ffffff;
-            --text-dark: #1f2937;
-            --text-muted: #6b7280;
-            --border-light: #e5e7eb;
-        }
-    </style>
+    :root {
+        --brand-primary: #ff5500;
+        --background-light: #f8f9fa;
+        --background-white: #ffffff;
+        --text-dark: #1f2937;
+        --text-muted: #6b7280;
+        --border-light: #e5e7eb;
+    }
+</style>
 
 <div x-data="{ sidebarOpen: false }"></div>
 <div class="flex h-screen overflow-hidden">
-        <!-- Mobile Sidebar Overlay -->
-        <div x-show="sidebarOpen" 
-        x-transition:enter="transition-opacity ease-linear duration-300" 
-        x-transition:enter-start="opacity-0"
-         x-transition:enter-end="opacity-100" 
-         x-transition:leave="transition-opacity ease-linear duration-300"
-          x-transition:leave-start="opacity-100"
-           x-transition:leave-end="opacity-0"
-            class="fixed inset-0 z-50 flex md:hidden" @click.away="sidebarOpen = false">
-            <div class="fixed inset-0 bg-opacity-50" @click="sidebarOpen = false"></div>
-            <aside x-show="sidebarOpen" 
-            x-transition:enter="transition ease-in-out duration-300 transform" 
-            x-transition:enter-start="-translate-x-full"
-             x-transition:enter-end="translate-x-0" 
-             x-transition:leave="transition ease-in-out duration-300 transform" 
-             x-transition:leave-start="translate-x-0" 
-             x-transition:leave-end="-translate-x-full" class="relative z-10 flex w-64 flex-col justify-between bg-[var(--brand-primary)] text-white shadow-lg transition-all duration-300">
-                <div>
-                    <div class="flex items-center justify-between border-b border-orange-700 p-4">
-                        <div class="flex items-center justify-center h-16 px-4 bg-orange-700">
-                            <a href="{% url 'events:home' %}">
-                                    <span class="text-xl font-semibold">Evently</span>
-                            </a>
-                            
-                        </div>
-                        <button class="p-2 text-white md:hidden" @click="sidebarOpen = false">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    <div class="flex flex-col flex-grow px-4 py-4 overflow-y-auto">
-                        <nav class="flex-1 space-y-2">
-                            <a href="#" class="flex items-center px-4 py-2 text-sm font-medium rounded-md bg-orange-700 text-white">
-                                <i class="fas fa-tachometer-alt mr-3"></i>
-                                Dashboard
-                            </a>
-                            <a href="#" class="flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-orange-700 text-white">
-                                <i class="fas fa-calendar-check mr-3"></i>
-                               Create Event
-                            </a>
-                            
-                            <a href="{% url 'account_logout' %}" class="flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-orange-700 text-white">
-                                <i class="fas fa-cog mr-3"></i>
-                                Logout
-                            </a>
-                        </nav>
-                    </div>
-                </div>
-                <div class="p-4 border-t border-orange-700">
-                    <div class="flex items-center">
-                        <img class="w-10 h-10 rounded-full" src="https://randomuser.me/api/portraits/women/11.jpg" alt="User">
-                        <div class="ml-3">
-                            <p class="text-sm font-medium">{{ user.email }}</p>
-                            <p class="text-xs text-orange-200">Organizer</p>
-                        </div>
-                    </div>
-                </div>
-            </aside>
-        </div>
+    <!-- Mobile Sidebar Overlay -->
+    <div x-show="sidebarOpen" x-transition:enter="transition-opacity ease-linear duration-300"
+        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+        x-transition:leave="transition-opacity ease-linear duration-300" x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0" class="fixed inset-0 z-50 flex md:hidden" @click.away="sidebarOpen = false">
+        <div class="fixed inset-0 bg-opacity-50" @click="sidebarOpen = false"></div>
+        <aside x-show="sidebarOpen" x-transition:enter="transition ease-in-out duration-300 transform"
+            x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0"
+            x-transition:leave="transition ease-in-out duration-300 transform" x-transition:leave-start="translate-x-0"
+            x-transition:leave-end="-translate-x-full"
+            class="relative z-10 flex w-64 flex-col justify-between bg-[var(--brand-primary)] text-white shadow-lg transition-all duration-300">
+            <div>
+                <div class="flex items-center justify-between border-b border-orange-700 p-4">
+                    <div class="flex items-center justify-center h-16 px-4">
+                        <a href="{% url 'events:home' %}">
+                            <span class="text-xl font-semibold">Eventura</span>
+                        </a>
 
-        <!-- Desktop Sidebar -->
-        <div class="hidden md:flex md:flex-shrink-0">
-            <div class="flex flex-col w-64 bg-[var(--brand-primary)] text-white">
-            <div class="flex items-center justify-center h-16 px-4 bg-orange-700">
-                <a href="{% url 'events:home' %}">
-                    <span class="text-xl font-semibold">Evently</span>
-                </a>
-            
-            </div>
+                    </div>
+                    <button class="p-2 text-white md:hidden" @click="sidebarOpen = false">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
                 <div class="flex flex-col flex-grow px-4 py-4 overflow-y-auto">
                     <nav class="flex-1 space-y-2">
-                        <a href="#" class="flex items-center px-4 py-2 text-sm font-medium rounded-md bg-orange-700 text-white">
+                        <a href="#"
+                            class="flex items-center px-4 py-2 text-sm font-medium rounded-md bg-orange-700 text-white">
                             <i class="fas fa-tachometer-alt mr-3"></i>
                             Dashboard
                         </a>
-                        <a href="#" class="flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-orange-700 text-white">
+                        <a href="{% url 'accounts:edit_profile' %}"
+                            class="flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-orange-700 text-white">
                             <i class="fas fa-calendar-check mr-3"></i>
-                           Create Events
+                            Edit Profile
                         </a>
-                       
-                        <a href="{% url 'account_logout' %}" class="flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-orange-700 text-white">
-                                <i class="fas fa-cog mr-3"></i>
-                                Logout
-                            </a>
+                        <a href="{% url 'events:create_event' %}"
+                            class="flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-orange-700 text-white">
+                            <i class="fas fa-calendar-check mr-3"></i>
+                            Create Event
+                        </a>
+
+                        <a href="{% url 'account_logout' %}"
+                            class="flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-orange-700 text-white">
+                            <i class="fas fa-cog mr-3"></i>
+                            Logout
+                        </a>
                     </nav>
                 </div>
-                <div class="p-4 border-t border-orange-700">
-                    <div class="flex items-center">
-                        <img class="w-10 h-10 rounded-full" src="https://randomuser.me/api/portraits/women/11.jpg" alt="User">
-                        <div class="ml-3">
-                            <p class="text-sm font-medium">{{ user.email }}</p>
-                            <p class="text-xs text-orange-200">Organizer</p>
-                        </div>
+            </div>
+            <div class="p-4 border-t border-orange-700">
+                <div class="flex items-center">
+                    <img class="w-10 h-10 rounded-full" src="{{ user.profile_image.url }}" alt="User">
+                    <div class="ml-3">
+                        <p class="text-sm font-medium">{{ user.full_name|default:user.email }}</p>
+                        <p class="text-xs text-orange-200">Organizer</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Desktop Sidebar -->
+    <div class="hidden md:flex md:flex-shrink-0">
+        <div class="flex flex-col w-64 bg-[var(--brand-primary)] text-white">
+            <div class="flex items-center justify-center h-16 px-4 bg-orange-700">
+                <a href="{% url 'events:home' %}">
+                    <span class="text-xl font-semibold">Eventura</span>
+                </a>
+
+            </div>
+            <div class="flex flex-col flex-grow px-4 py-4 overflow-y-auto">
+                <nav class="flex-1 space-y-2">
+                    <a href="#"
+                        class="flex items-center px-4 py-2 text-sm font-medium rounded-md bg-orange-700 text-white">
+                        <i class="fas fa-tachometer-alt mr-3"></i>
+                        Dashboard
+                    </a>
+                    <a href="{% url 'accounts:edit_profile' %}"
+                        class="flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-orange-700 text-white">
+                        <i class="fas fa-calendar-check mr-3"></i>
+                        Edit Profile
+                    </a>
+                    <a href="{% url 'events:create_event' %}"
+                        class="flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-orange-700 text-white">
+                        <i class="fas fa-calendar-check mr-3"></i>
+                        Create Event
+                    </a>
+
+                    <a href="{% url 'account_logout' %}"
+                        class="flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-orange-700 text-white">
+                        <i class="fas fa-cog mr-3"></i>
+                        Logout
+                    </a>
+                </nav>
+            </div>
+            <div class="p-4 border-t border-orange-700">
+                <div class="flex items-center">
+                    <img class="w-10 h-10 rounded-full" src="{{ user.profile_image.url }}" alt="User">
+                    <div class="ml-3">
+                        <p class="text-sm font-medium">{{ user.email }}</p>
+                        <p class="text-xs text-orange-200">Organizer</p>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Main Content -->
-        <div class="flex flex-col flex-1 overflow-hidden">
-            <!-- Top Navigation -->
-            <header class="flex items-center justify-between px-6 py-4 bg-[var(--background-white)] border-b border-[var(--border-light)]">
-                <div class="flex items-center">
-                    <button class="md:hidden text-[var(--text-muted)] focus:outline-none" @click="sidebarOpen = !sidebarOpen">
-                        <i class="fas fa-bars"></i>
+    <!-- Main Content -->
+    <div class="flex flex-col flex-1 overflow-hidden">
+        <!-- Top Navigation -->
+        <header
+            class="flex items-center justify-between px-6 py-4 bg-[var(--background-white)] border-b border-[var(--border-light)]">
+            <div class="flex items-center">
+                <button class="md:hidden text-[var(--text-muted)] focus:outline-none"
+                    @click="sidebarOpen = !sidebarOpen">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="text-xl font-semibold text-[var(--text-dark)] ml-4">Dashboard</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="text-[var(--text-muted)] focus:outline-none">
+                    <i class="fas fa-bell"></i>
+                </button>
+                <button class="text-[var(--text-muted)] focus:outline-none">
+                    <i class="fas fa-envelope"></i>
+                </button>
+                <div class="relative">
+                    <button class="flex items-center focus:outline-none">
+                        <img class="w-8 h-8 rounded-full" src="{{ user.profile_image.url }}" alt="User">
                     </button>
-                    <h1 class="text-xl font-semibold text-[var(--text-dark)] ml-4">Dashboard</h1>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <button class="text-[var(--text-muted)] focus:outline-none">
-                        <i class="fas fa-bell"></i>
-                    </button>
-                    <button class="text-[var(--text-muted)] focus:outline-none">
-                        <i class="fas fa-envelope"></i>
-                    </button>
-                    <div class="relative">
-                        <button class="flex items-center focus:outline-none">
-                            <img class="w-8 h-8 rounded-full" src="https://randomuser.me/api/portraits/women/11.jpg" alt="User">
-                        </button>
-                    </div>
-                </div>
-            </header>
+            </div>
+        </header>
 
-            <!-- Main Content Area -->
-            <main class="flex-1 overflow-y-auto p-6 bg-[var(--background-light)]">
-                <!-- Stats Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                    <div class="bg-[var(--background-white)] rounded-lg shadow p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-orange-100 text-[var(--brand-primary)]">
-                                <i class="fas fa-bed text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-[var(--text-muted)]">Total Events</p>
-                                <p class="text-2xl font-semibold text-[var(--text-dark)]">{{ total_events }}</p>
-                            </div>
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-y-auto p-6 bg-[var(--background-light)]">
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                <div class="bg-[var(--background-white)] rounded-lg shadow p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-orange-100 text-[var(--brand-primary)]">
+                            <i class="fas fa-bed text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-[var(--text-muted)]">Total Events</p>
+                            <p class="text-2xl font-semibold text-[var(--text-dark)]">{{ total_events }}</p>
                         </div>
                     </div>
-                    <div class="bg-[var(--background-white)] rounded-lg shadow p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-green-100 text-green-600">
-                                <i class="fas fa-calendar-check text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-[var(--text-muted)]">Upcoming events</p>
-                                <p class="text-2xl font-semibold text-[var(--text-dark)]">{{ total_upcoming_events }}</p>
-                            </div>
+                </div>
+                <div class="bg-[var(--background-white)] rounded-lg shadow p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-green-100 text-green-600">
+                            <i class="fas fa-calendar-check text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-[var(--text-muted)]">Upcoming events</p>
+                            <p class="text-2xl font-semibold text-[var(--text-dark)]">{{ total_upcoming_events }}</p>
                         </div>
                     </div>
-                    <div class="bg-[var(--background-white)] rounded-lg shadow p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
-                                <i class="fas fa-calendar-day text-xl"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-[var(--text-muted)]">Past events</p>
-                                <p class="text-2xl font-semibold text-[var(--text-dark)]">{{ total_past_events }}</p>
-                            </div>
+                </div>
+                <div class="bg-[var(--background-white)] rounded-lg shadow p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                            <i class="fas fa-calendar-day text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-[var(--text-muted)]">Past events</p>
+                            <p class="text-2xl font-semibold text-[var(--text-dark)]">{{ total_past_events }}</p>
                         </div>
                     </div>
-                  
                 </div>
 
-                <!-- Recent Bookings and Room Status -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                    <!-- Recent Bookings -->
-                    <div class="lg:col-span-2 bg-[var(--background-white)] rounded-lg shadow overflow-hidden">
-                        <div class="px-6 py-4 border-b border-[var(--border-light)]">
-                            <h2 class="text-lg font-semibold text-[var(--text-dark)]">Upcoming Events</h2>
-                        </div>
-                        <div class="overflow-x-auto">
-                            {% if not upcoming_events %}
-                                     <p>No events coming up</p>
-                            {% else %}
-                            <table class="min-w-full divide-y divide-[var(--border-light)]">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">ID</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">Title</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">Venue</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">Capacity</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">Date & Time</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-[var(--background-white)] divide-y divide-[var(--border-light)]">
-                                    
-                                    
-                                        {% for event in upcoming_events %}
-                                        
-                                        
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="flex items-center">
-                                                
-                                                <div class="ml-4">
-                                                    <div class="text-sm font-medium text-[var(--text-dark)]">{{ event.id }}</div>
-                                                   
+            </div>
+
+            <!-- Recent Bookings and Room Status -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                <!-- Recent Bookings -->
+                <div class="lg:col-span-2 bg-[var(--background-white)] rounded-lg shadow overflow-hidden">
+                    <div class="px-6 py-4 border-b border-[var(--border-light)]">
+                        <h2 class="text-lg font-semibold text-[var(--text-dark)]">Upcoming Events</h2>
+                    </div>
+                    <div class="overflow-x-auto">
+                        {% if not upcoming_events %}
+                        <p>No events coming up</p>
+                        {% else %}
+                        <table class="min-w-full divide-y divide-[var(--border-light)]">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">
+                                        ID</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">
+                                        Title</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">
+                                        Venue</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">
+                                        Capacity</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">
+                                        Date & Time</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-[var(--background-white)] divide-y divide-[var(--border-light)]">
+
+
+                                {% for event in upcoming_events %}
+
+
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-[var(--text-dark)]">{{ event.id }}
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-[var(--text-dark)]">{{ event.title }}</div>
-                                            
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-[var(--text-muted)]">
-                                            {{ event.venue }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-[var(--text-muted)]">
-                                            {{ event.capacity }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold ">
-                                                {{ event.start_time }}
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <a href="{% url 'events:update_event' event.slug %}">
 
-                                                <button class="bg-slate-500">Edit</button>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                    
-                                    
-                                    
-                                </tbody>
-                            </table>
-                            {% endif %}
-                        </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-[var(--text-dark)]">{{ event.title }}</div>
+
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-[var(--text-muted)]">
+                                        {{ event.venue }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-[var(--text-muted)]">
+                                        {{ event.capacity }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold ">
+                                            {{ event.start_time }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <a href="{% url 'events:update_event' event.slug %}">
+
+                                            <button class="bg-slate-500">Edit</button>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+
+
+
+                            </tbody>
+                        </table>
+                        {% endif %}
                     </div>
+                </div>
 
-                    <div class="lg:col-span-2 bg-[var(--background-white)] rounded-lg shadow overflow-hidden">
-                        <div class="px-6 py-4 border-b border-[var(--border-light)]">
-                            <h2 class="text-lg font-semibold text-[var(--text-dark)]">Past Events</h2>
-                        </div>
-                        <div class="overflow-x-auto">
-                            {% if not past_events %}
-                                     <p>No Past Events</p>
-                            {% else %}
-                            <table class="min-w-full divide-y divide-[var(--border-light)]">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">ID</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">Title</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">Venue</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">Capacity</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">Date & Time</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-[var(--background-white)] divide-y divide-[var(--border-light)]">
-                                    
-                                    
-                                        {% for event in past_events %}
-                                        
-                                        
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="flex items-center">
-                                                
-                                                <div class="ml-4">
-                                                    <div class="text-sm font-medium text-[var(--text-dark)]">{{ event.id }}</div>
-                                                   
+                <div class="lg:col-span-2 bg-[var(--background-white)] rounded-lg shadow overflow-hidden">
+                    <div class="px-6 py-4 border-b border-[var(--border-light)]">
+                        <h2 class="text-lg font-semibold text-[var(--text-dark)]">Past Events</h2>
+                    </div>
+                    <div class="overflow-x-auto">
+                        {% if not past_events %}
+                        <p>No Past Events</p>
+                        {% else %}
+                        <table class="min-w-full divide-y divide-[var(--border-light)]">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">
+                                        ID</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">
+                                        Title</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">
+                                        Venue</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">
+                                        Capacity</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">
+                                        Date & Time</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-[var(--background-white)] divide-y divide-[var(--border-light)]">
+
+
+                                {% for event in past_events %}
+
+
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-[var(--text-dark)]">{{ event.id }}
                                                 </div>
+
                                             </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-[var(--text-dark)]">{{ event.title }}</div>
-                                            
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-[var(--text-muted)]">
-                                            {{ event.venue }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-[var(--text-muted)]">
-                                            {{event.capacity }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ">
-                                                {{ event.start_time }}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                    
-                                    
-                                    
-                                </tbody>
-                            </table>
-                            {% endif %}
-                        </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-[var(--text-dark)]">{{ event.title }}</div>
+
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-[var(--text-muted)]">
+                                        {{ event.venue }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-[var(--text-muted)]">
+                                        {{event.capacity }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ">
+                                            {{ event.start_time }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+
+
+
+                            </tbody>
+                        </table>
+                        {% endif %}
+                    </div>
 
                     <!-- Room Status -->
-                    
+
                 </div>
 
                 <!-- Quick Actions -->
@@ -317,22 +351,22 @@
                     <h2 class="text-lg font-semibold text-[var(--text-dark)] mb-4">Quick Actions</h2>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <a href="{% url 'events:create_event' %}">
-                                    <button
-                                        class="flex flex-col items-center justify-center p-4 border border-[var(--border-light)] rounded-lg hover:bg-orange-50 hover:border-orange-200 transition">
-                                        <div class="p-3 rounded-full bg-orange-100 text-[var(--brand-primary)] mb-2">
-                                            <i class="fas fa-plus text-lg"></i>
-                                        </div>
-                                        <span class="text-sm font-medium text-[var(--text-dark)]">Create Event</span>
-                                    </button>
+                            <button
+                                class="flex flex-col items-center justify-center p-4 border border-[var(--border-light)] rounded-lg hover:bg-orange-50 hover:border-orange-200 transition">
+                                <div class="p-3 rounded-full bg-orange-100 text-[var(--brand-primary)] mb-2">
+                                    <i class="fas fa-plus text-lg"></i>
+                                </div>
+                                <span class="text-sm font-medium text-[var(--text-dark)]">Create Event</span>
+                            </button>
                         </a>
-                       
-                      
-                       
+
+
+
                     </div>
                 </div>
-            </main>
-        </div>
+        </main>
     </div>
+</div>
 
 
 

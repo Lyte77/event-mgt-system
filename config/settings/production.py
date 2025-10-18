@@ -12,8 +12,8 @@ environ.Env.read_env(BASE_DIR / ".env")  # Load environment variables
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    "your-pythonanywhere-username.pythonanywhere.com",  # example
-    "www.yourcustomdomain.com",  # if you add a domain later
+    "eventura.pythonanywhere.com",  # example
+   
 ]
 
 # ---------------------------------------------

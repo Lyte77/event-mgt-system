@@ -12,9 +12,10 @@ environ.Env.read_env(BASE_DIR / ".env")  # Load environment variables
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    "eventura.pythonanywhere.com",  # example
+     # example
    
 ]
+
 
 # ---------------------------------------------
 # SECURITY SETTINGS
@@ -41,8 +42,13 @@ DATABASES = {
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-MEDIA_URL = '/media/'
+# MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'mediafiles'
+DEFAULT_FILE_STORAGE = {
+    'CLOUDINARY_URL':env("CLOUDINARY_URL")
+}
+
+
 
 # ---------------------------------------------
 # EMAIL (Production-ready)

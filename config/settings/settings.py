@@ -23,7 +23,9 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1','event-mgt-system.onrender.com']
+
+CSRF_TRUSTED_ORIGINS = ['https://event-mgt-system.onrender.com']
 
 
 # Application definition
@@ -46,6 +48,8 @@ THIRD_PARTY_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'django_countries',
+    'cloudinary_storage',
+    'cloudinary',
 
 ]
 
@@ -88,6 +92,7 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 if DEBUG:

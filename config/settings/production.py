@@ -54,6 +54,9 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = BASE_DIR / 'mediafiles'
 
+MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 CLOUDINARY_URL = env("CLOUDINARY_URL")
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 

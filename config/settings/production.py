@@ -46,8 +46,12 @@ DATABASES = {
 # ---------------------------------------------
 # STATIC_URL = '/static/'
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # for collected files
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # if you keep Tailwind build output here
+]
 MEDIA_URL = '/media/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 MEDIA_ROOT = BASE_DIR / 'mediafiles'
 
 CLOUDINARY_URL = env("CLOUDINARY_URL")

@@ -4,17 +4,17 @@ from .settings import *
 import environ
 
 env = environ.Env()
-environ.Env.read_env(BASE_DIR / ".env")  # Load environment variables
+ # Load environment variables
 
 # ---------------------------------------------
 # GENERAL CONFIG
 # ---------------------------------------------
 DEBUG = False
 
-ALLOWED_HOSTS = [
-    " event-mgt-system.onrender.com"
-   
-]
+CSRF_TRUSTED_ORIGINS = ['https://event-mgt-system.onrender.com']
+
+ALLOWED_HOSTS = ["event-mgt-system.onrender.com"]
+
 
 
 # ---------------------------------------------
@@ -39,14 +39,14 @@ DATABASES = {
 # ---------------------------------------------
 # STATIC & MEDIA FILES
 # ---------------------------------------------
+# STATIC_URL = '/static/'
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-# MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'mediafiles'
-DEFAULT_FILE_STORAGE = {
-    'CLOUDINARY_URL':env("CLOUDINARY_URL")
-}
+
+CLOUDINARY_URL = env("CLOUDINARY_URL")
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
 

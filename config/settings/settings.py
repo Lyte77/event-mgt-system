@@ -25,7 +25,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1','event-mgt-system.onrender.com']
 
-CSRF_TRUSTED_ORIGINS = ['https://event-mgt-system.onrender.com']
+
 
 
 # Application definition

@@ -2,6 +2,11 @@
 
 from .settings import *
 import environ
+import os
+from pathlib import Path
+
+LOG_DIR = Path(BASE_DIR) / 'logs'
+LOG_DIR.mkdir(exist_ok=True) 
 
 env = environ.Env()
  # Load environment variables
@@ -64,24 +69,39 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # ---------------------------------------------
 # LOGGING
 # ---------------------------------------------
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'ERROR',
-            'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'logs/django_error.log',
+if os.environ.get("RENDER"):  # Running on Render
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler',
+            },
         },
-        'console': {
-            'class': 'logging.StreamHandler',
+        'root': {
+            'handlers': ['console'],
+            'level': 'WARNING',
         },
-    },
-    'root': {
-        'handlers': ['file', 'console'],
-        'level': 'WARNING',
-    },
-}
+    }
+else:  # Local development
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'file': {
+                'level': 'ERROR',
+                'class': 'logging.FileHandler',
+                'filename': LOG_DIR / 'django_error.log',
+            },
+            'console': {
+                'class': 'logging.StreamHandler',
+            },
+        },
+        'root': {
+            'handlers': ['file', 'console'],
+            'level': 'WARNING',
+        },
+    }
 
 # ---------------------------------------------
 # ALLOWED HOSTS CHECK

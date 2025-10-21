@@ -72,7 +72,7 @@
                     <img class="w-10 h-10 rounded-full" src="{{ user.profile.profile_pic.url  }}" alt="User">
                     <div class="ml-3">
                         <p class="text-sm font-medium">{{ user.full_name|default:user.email }}</p>
-                        <p class="text-xs text-orange-200">Organizer</p>
+                        <p class="text-xs text-orange-200">{{ user.role }}</p>
                     </div>
                 </div>
             </div>
@@ -100,11 +100,7 @@
                         <i class="fas fa-calendar-check mr-3"></i>
                         Edit Profile
                     </a>
-                    <a href="{% url 'events:create_event' %}"
-                        class="flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-orange-700 text-white">
-                        <i class="fas fa-calendar-check mr-3"></i>
-                        Create Event
-                    </a>
+                  
 
                     <a href="{% url 'account_logout' %}"
                         class="flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-orange-700 text-white">
@@ -118,7 +114,7 @@
                     <img class="w-10 h-10 rounded-full" src="{{ user.profile.profile_pic.url }}" alt="User">
                     <div class="ml-3">
                         <p class="text-sm font-medium">{{ user.email }}</p>
-                        <p class="text-xs text-orange-200">Organizer</p>
+                        <p class="text-xs text-orange-200">{{ user.role }}</p>
                     </div>
                 </div>
             </div>

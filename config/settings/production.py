@@ -12,7 +12,7 @@ environ.Env.read_env(BASE_DIR / ".env")  # Load environment variables
 DEBUG = False
 
 ALLOWED_HOSTS = [
-     # example
+    " event-mgt-system.onrender.com"
    
 ]
 

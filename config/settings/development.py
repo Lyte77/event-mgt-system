@@ -8,7 +8,7 @@ import os
 DEBUG = True
 
 # In dev we allow localhost and the machine hostname
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost",  "event-mgt-system.onrender.com"]
 
 # -----------------------------------------------------------------------------
 # Secret key (dev fallback)

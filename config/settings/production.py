@@ -46,10 +46,10 @@ DATABASES = {
 # ---------------------------------------------
 # STATIC_URL = '/static/'
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'  # for collected files
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',  # if you keep Tailwind build output here
-]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+
+
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = BASE_DIR / 'mediafiles'

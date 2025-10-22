@@ -22,5 +22,5 @@ logs/
 .idea/
 
 # Allow built Tailwind CSS to be tracked
-!static/dist/
-!static/dist/styles.css
+# !static/dist/
+# !static/dist/styles.css

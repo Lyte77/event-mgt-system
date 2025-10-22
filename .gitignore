@@ -20,3 +20,7 @@ logs/
 # IDE/editor configs
 .vscode/
 .idea/
+
+# Allow built Tailwind CSS to be tracked
+!static/dist/
+!static/dist/styles.css

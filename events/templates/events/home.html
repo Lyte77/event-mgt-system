@@ -38,7 +38,7 @@
        
         <main class="flex-grow">
             <section class="relative h-auto w-full bg-cover bg-center">
-                <div class="absolute inset-0 bg-black/60"
+                <div class="absolute inset-0 bg-black/60" 
                     style='background-image: url({% static 'images/event-hero1.jpg' %}); background-size: cover; background-position: center;'>
                 </div>
                 <div
@@ -135,6 +135,10 @@
                             </div>
                         </div>
                       {% endfor %}
+
+                      <a href="{% url 'events:event_list' %}" class="rounded-full bg-orange-600 px-6 py-3 md:px-8 md:py-4 text-base md:text-lg font-semibold text-white shadow-lg hover:bg-opacity-90 transition-all transform hover:scale-105">
+                        Explore All Events
+                      </a>
                         
                         
                         

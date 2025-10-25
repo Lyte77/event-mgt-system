@@ -1,0 +1,11 @@
+{% if widget.is_initial %}
+  <div class="space-y-2">
+    <div class="flex items-center space-x-4">
+      <img src="{{ widget.value.url }}" alt="Current Image" class="w-16 h-16 rounded-full object-cover border" />
+      <span class="text-sm text-gray-600">Change:</span>
+      <input type="{{ widget.type }}" name="{{ widget.name }}" {{ widget.attrs }}>
+    </div>
+  </div>
+{% else %}
+  <input type="{{ widget.type }}" name="{{ widget.name }}" {{ widget.attrs }}>
+{% endif %}

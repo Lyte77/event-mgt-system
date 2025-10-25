@@ -1,12 +1,13 @@
 
 from pathlib import Path
-
+import cloudinary_storage
 from environ import Env
 import environ
 import os
 env = Env()
 env = environ.Env()
 Env.read_env()
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -36,7 +37,9 @@ DJANGO_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles', 
+    'django.contrib.staticfiles',
+    'cloudinary_storage',
+    'cloudinary', 
     'django_browser_reload',
   
      
@@ -48,8 +51,7 @@ THIRD_PARTY_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'django_countries',
-    'cloudinary_storage',
-    'cloudinary',
+   
 
 ]
 
@@ -175,6 +177,8 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 

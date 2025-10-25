@@ -1,14 +1,14 @@
 # eventapp/settings/dev.py
 from .settings import *   # import everything from base
 import os
-
+import cloudinary_storage
 # -----------------------------------------------------------------------------
 # Debug / Hosts
 # -----------------------------------------------------------------------------
 DEBUG = True
 
 # In dev we allow localhost and the machine hostname
-ALLOWED_HOSTS = ["127.0.0.1", "localhost",  "event-mgt-system.onrender.com"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost",]
 
 # -----------------------------------------------------------------------------
 # Secret key (dev fallback)
@@ -27,6 +27,10 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': env.db('DATABASE_URL', default=''),
+# }
+
 
 # -----------------------------------------------------------------------------
 # Static & media - local convenience
@@ -35,6 +39,13 @@ DATABASES = {
 STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
 
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'ddns4ydis',
+    'API_KEY': '633339777439151',
+    'API_SECRET': 'Dj447P7tk2i1NP2WEXo_4cTp1Jk',
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 # -----------------------------------------------------------------------------
 # Email - use console backend in development
 # -----------------------------------------------------------------------------

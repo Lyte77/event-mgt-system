@@ -1,18 +1,17 @@
 {% extends "base.html" %} 
-{% load i18n %} 
-{% load account socialaccount %} 
-
-{% block content %}
-<div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-  <div class="w-full max-w-md bg-white rounded-lg shadow-md p-6 space-y-6">
+{% load i18n %}
+ {% load account socialaccount %} 
+ 
+{%block content %} 
+{% include 'events/partials/navbar.html' %}
+<div class="min-h-screen bg-gray-100 flex justify-center px-4 py-20 sm:py-24">
+  <div class="w-full max-w-md bg-white rounded-xl shadow-lg p-8 space-y-6">
     <!-- Title -->
-    <h2 class="text-2xl font-bold text-center text-orange-600">Sign Up</h2>
+    <h2 class="text-3xl font-bold text-center text-orange-600">Sign Up</h2>
 
     <!-- Signup Form -->
     <form method="post" action="{% url 'account_signup' %}" class="space-y-4">
-      {% csrf_token %} 
-      {{ form.non_field_errors }}
-
+      {% csrf_token %} {{ form.non_field_errors }}
       <!-- Email -->
       <div>
         <label
@@ -24,7 +23,6 @@
         <p class="text-red-500 text-xs">{{ error }}</p>
         {% endfor %}
       </div>
-
       <!-- Organizer Checkbox -->
       <div
         class="flex items-center space-x-3 bg-orange-50 rounded-md px-4 py-3 mt-2 border border-orange-100"
@@ -38,7 +36,6 @@
           <span class="text-orange-600 font-semibold">organizer</span>
         </label>
       </div>
-
       <!-- Password -->
       <div>
         <label
@@ -50,7 +47,6 @@
         <p class="text-red-500 text-xs">{{ error }}</p>
         {% endfor %}
       </div>
-
       <!-- Confirm Password -->
       <div>
         <label
@@ -62,7 +58,6 @@
         <p class="text-red-500 text-xs">{{ error }}</p>
         {% endfor %}
       </div>
-
       <!-- Submit Button -->
       <button
         type="submit"
@@ -71,12 +66,9 @@
         {% trans "Sign Up" %}
       </button>
     </form>
-
     <!-- Divider -->
-
     <!-- Google Signup -->
     {% include 'accounts/social_logins.html' %}
-
     <!-- Already have an account -->
     <p class="text-center text-sm text-gray-600">
       {% trans "Already have an account?" %}

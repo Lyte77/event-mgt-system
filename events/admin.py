@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Event,Ticket,TicketType
+from .models import Event,Ticket,TicketType, Category
 
 # Register your models here.
 
@@ -9,7 +9,14 @@ class EventAdmin(admin.ModelAdmin):
     list_filter = ('status','start_time')
     search_fields = ('title','venue','description')
     list_editable = ('status',)
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name',)
     
+    search_fields = ('name',)
+    
+    
+
 
 
 @admin.register(Ticket)

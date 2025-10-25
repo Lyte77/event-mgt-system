@@ -3,10 +3,34 @@ from django.conf import settings
 import uuid
 from django.utils.text import slugify
 from .managers import TicketManager
+from cloudinary.models import CloudinaryField
+
+class Category(models.Model):
+    name = models.CharField(max_length=100,unique=True)
+    slug = models.SlugField(max_length=120,unique=True)
+    
+
+    class Meta:
+        verbose_name_plural = "Categories"
+
+    
+    def save(self,*args,**kwargs):
+        if not self.slug:
+            base_slug = slugify(self.name)
+            slug = base_slug
+            num = 1
+            while Event.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{num}"
+                num += 1
+            self.slug = slug
+        super().save(*args,**kwargs)
+
+    def __str__(self):
+        return self.name
 
 class Event(models.Model):
     STATUS_CHOICES = [
-        ("draft","Draft"),
+        
         ("upcoming","Upcoming"),
         ("ongoing","Ongoing"),
         ("completed","Completed"),
@@ -16,18 +40,21 @@ class Event(models.Model):
     organizer = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='organized_events')
     title = models.CharField(max_length=200)
     description = models.TextField()
-    event_image = models.ImageField(upload_to='event_pics/',null=True,blank=True)
+    # event_image = models.ImageField(upload_to='event_pics/',null=True,blank=True)
+    event_image = CloudinaryField('event_image', blank=True, null=True)
+
     venue = models.CharField(max_length=255,blank=True,null=True)
     online_link = models.URLField(blank=True,null=True)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField(blank=True,null=True)
     capacity = models.PositiveIntegerField(null=True,blank=True)
-   
+    categories = models.ManyToManyField("Category", related_name="events", blank=True)
     status = models.CharField(max_length=20,choices=STATUS_CHOICES,default="upcoming",db_index=True)
     slug = models.SlugField(unique=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_published = models.BooleanField(default=True, db_index=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
 
     def save(self,*args,**kwargs):
         if not self.slug:
@@ -46,6 +73,8 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
+
+
 
 
 class TicketType(models.Model):
@@ -91,15 +120,6 @@ class Ticket(models.Model):
 
 
     
-class Category(models.Model):
-    name = models.CharField(max_length=100,unique=True)
-    slug = models.SlugField(max_length=120,unique=True)
-    events = models.ManyToManyField(Event,related_name='categories',blank=True)
 
-    class Meta:
-        verbose_name_plural = "Categories"
-
-    def __str__(self):
-        return self.name
     
 

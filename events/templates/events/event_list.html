@@ -1,10 +1,56 @@
 {% extends 'base.html' %}
-
 {% block content %}
 
-{% for event in events %}
-    {{ event.title }}
-    <a href="{% url 'events:event_detail' event.slug %}">More Details</a>
-{% endfor %}
+{% include 'events/partials/navbar.html' %}
+<div class="relative flex min-h-screen flex-col overflow-x-hidden">
+    <main class="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+        <div class="flex flex-col gap-8">
+            <div class="flex flex-col gap-4 text-center">
+                <h1 class="text-4xl font-black tracking-tighter sm:text-5xl">Discover Events</h1>
+                <p class="mx-auto max-w-2xl text-lg text-gray-500">Find your next experience. Search for events, venues,
+                    or artists and filter by category to find exactly what you're looking for.</p>
+            </div>
+            <div class="mx-auto w-full max-w-3xl px-4 py-3">
+                <div class="relative">
+                    <span
+                        class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+                    <input
+                        class="h-16 w-full rounded-full border-2 border-gray-200 bg-white pl-12 pr-6 text-base text-gray-800 placeholder-gray-400 focus:border-orange-600 focus:outline-none focus:ring-1 focus:ring-orange-600"
+                        placeholder="Search for events, venues, or artists" 
+                        type="search" 
+                        name="q"
+                        hx-trigger="keyup changed delay:500ms"
+                        hx-get="{% url 'events:event_list' %}" 
+                        hx-target="#event-list" 
+                        value="{{ search_query|default:'' }}" />
+                </div>
+            </div>
+            <div class="flex justify-center gap-2 overflow-x-auto p-3 sm:gap-3">
+                <a href="{% url 'events:event_list' %}">
+                        <button
+                
+                    class="h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-orange-600 px-4 text-sm font-semibold text-white sm:px-6">All</button>
+                </a>
+                
+                        {% for category in categories %}
+                <button
+                     hx-get="{% url 'events:event_list' %}?category={{ category.slug }}"
+                    hx-target="#event-list"
+                    hx-swap="innerHTML"
+                   
+                    
+                    class="h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-gray-100 px-4 text-sm font-medium text-gray-700 transition-colors hover:bg-orange-100 hover:text-orange-700 sm:px-6">{{ category.name }}</button>
+                    {% endfor %}
+                
+            </div>
+            
+                <div id="event-list">
+               {% include 'events/partials/_event_list_partials.html' %}
+                </div>          
+       
+        </div>
+    </main>
+    {% include 'events/partials/footer.html' %}
+</div>
 
 {% endblock %}

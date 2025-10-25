@@ -3,10 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
 from django.core.cache import cache
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 from django.utils.timezone import now
 from django.http import HttpResponseForbidden
-from .models import Event, TicketType, Ticket
+from .models import Event, TicketType, Ticket,Category
 from django.db.models import Sum, Count,Q
 from .forms import EventForm,TicketTypeForm,TicketTypeFormSet
 import uuid
@@ -16,19 +18,56 @@ import uuid
 # Create your views here.
 
 def homepage(request):
-    events = Event.objects.filter(is_published=True)[:4]
+    events_qs = Event.objects.filter(is_published=True).only(
+        'id', 'title', 'event_image', 'start_time', 'end_time', 
+    )
+    events = events_qs[:4]
     upcoming_events = Event.objects.filter(status='upcoming')
 
 
     context = {'events':events,
                'upcoming_events': upcoming_events}
+    
     return render(request, 'events/home.html',context)
 
 def event_list(request):
-    events = Event.objects.filter(is_published=True,status="upcoming")
-    context = {'events':events}
+    events = (
+        Event.objects.filter(is_published=True)
+        .select_related('organizer')
+        .prefetch_related('categories')
+        .order_by('-start_time')
+    )
 
-    return render(request,'events/event_list.html',context)
+    category_slug = request.GET.get('category')
+    search_query = request.GET.get('q')
+    categories = Category.objects.all().order_by('name')
+
+    if category_slug:
+        events = events.filter(categories__slug=category_slug)
+
+    if search_query:
+        events = events.filter(
+            Q(title__icontains=search_query) |
+            Q(description__icontains=search_query) |
+            Q(venue__icontains=search_query)
+        )
+
+
+    paginator = Paginator(events, 9)  # 9 events per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    
+
+    context = {
+        'events': page_obj,
+        'categories': categories,
+        'selected_category': category_slug,
+        'search_query': search_query,
+        }
+    if request.headers.get('HX-Request'):
+        return render(request, 'events/partials/_event_list_partials.html', context)
+    return render(request, 'events/event_list.html', context)
 
 def event_detail(request, slug):
     event = get_object_or_404(Event,slug=slug,is_published=True)

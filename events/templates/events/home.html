@@ -102,49 +102,53 @@
                     </div>
                 </div>
             </section>
-            <section class="py-12 md:py-16 bg-gray-50">
-                <div class="container mx-auto px-4 sm:px-6">
-                    <h2 class="text-2xl md:text-3xl font-bold tracking-tighter text-gray-900 mb-6 md:mb-8">Popular
-                        Events</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-                      {% for event in events %}
-                        <div
-                            class="group flex flex-col bg-white rounded-xl shadow-md overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-                            <div class="relative">
-                                <div class="w-full h-48 bg-center bg-cover"
-                                    style='background-image: url("{{ event.event_image.url }}");'>
-                                </div>
-                                <div
-                                    class="absolute top-2 right-2 bg-white/90 rounded-full p-2.5 shadow-sm text-center leading-none">
-                                    <p class="text-xs sm:text-sm font-bold text-[var(--brand-accent)]">{{ event.start_time }}</p>
-                                    <p class="text-lg sm:text-xl font-extrabold text-gray-900 -mt-1"></p>
-                                </div>
-                            </div>
-                            <div class="p-4 sm:p-5 flex flex-col flex-grow">
-                                <h3
-                                    class="text-base sm:text-lg font-bold text-gray-900 mb-1 group-hover:text-[var(--brand-accent)] transition-colors">
-                                    {{ event.title }}</h3>
-                                <p class="text-sm text-gray-600 mb-4">{{ event.venue }}</p>
-                                <p class="text-sm text-gray-500 mt-auto">From $199</p>
-                            </div>
-                              <div class="mt-4">
-                                <a href="{% url 'events:event_detail' event.slug %}"
-                                  class="inline-flex w-full sm:w-auto justify-center rounded-lg bg-orange-600  px-4 py-2 text-sm font-medium text-white shadow-md  transition">
-                                    Get Details
-                                </a>
-                            </div>
-                        </div>
-                      {% endfor %}
+          <section class="py-12 md:py-16 bg-gray-50">
+  <div class="container mx-auto px-4 sm:px-6">
+    <h2 class="text-2xl md:text-3xl font-bold tracking-tighter text-gray-900 mb-6 md:mb-8">
+      Popular Events
+    </h2>
 
-                      <a href="{% url 'events:event_list' %}" class="rounded-full bg-orange-600 px-6 py-3 md:px-8 md:py-4 text-base md:text-lg font-semibold text-white shadow-lg hover:bg-opacity-90 transition-all transform hover:scale-105">
-                        Explore All Events
-                      </a>
-                        
-                        
-                        
-                    </div>
-                </div>
-            </section>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+      {% for event in events %}
+      <div
+        class="group flex flex-col bg-white rounded-xl shadow-md overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+        <div class="relative">
+          <div class="w-full h-48 bg-center bg-cover"
+            style='background-image: url("{{ event.event_image.url }}");'>
+          </div>
+          <div
+            class="absolute top-2 right-2 bg-white/90 rounded-full p-2.5 shadow-sm text-center leading-none">
+            <p class="text-xs sm:text-sm font-bold text-[var(--brand-accent)]">{{ event.start_time }}</p>
+          </div>
+        </div>
+        <div class="p-4 sm:p-5 flex flex-col flex-grow">
+          <h3
+            class="text-base sm:text-lg font-bold text-gray-900 mb-1 group-hover:text-[var(--brand-accent)] transition-colors">
+            {{ event.title }}
+          </h3>
+          <p class="text-sm text-gray-600 mb-4">{{ event.venue }}</p>
+          <p class="text-sm text-gray-500 mt-auto">From $199</p>
+        </div>
+        <div class="mt-4 px-4 pb-4">
+          <a href="{% url 'events:event_detail' event.slug %}"
+            class="inline-flex w-full sm:w-auto justify-center rounded-lg bg-orange-600 px-4 py-2 text-sm font-medium text-white shadow-md transition hover:bg-orange-700">
+            Get Details
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Centered "Explore All Events" button -->
+    <div class="mt-10 flex justify-center">
+      <a href="{% url 'events:event_list' %}"
+        class="rounded-full bg-orange-600 px-6 py-3 md:px-8 md:py-4 text-base md:text-lg font-semibold text-white shadow-lg hover:bg-orange-700 transition-all transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-orange-300">
+        Explore All Events
+      </a>
+    </div>
+  </div>
+</section>
+
             <section class="py-12 md:py-16 bg-white">
                 <div class="container mx-auto px-4 sm:px-6">
                     <div class="text-center mb-10 md:mb-12">
@@ -243,23 +247,7 @@
                 </div>
             </section>
         </main>
-        <footer class="bg-gray-100 border-t border-gray-200">
-            <div class="container mx-auto px-4 sm:px-6 py-8">
-                <div class="flex flex-col md:flex-row justify-between items-center text-center md:text-left">
-                    <p class="text-sm text-gray-500 mb-4 md:mb-0">© 2024 Evently. All rights reserved.</p>
-                    <div class="flex flex-wrap justify-center gap-x-4 gap-y-2 md:gap-x-6">
-                        <a class="text-sm text-gray-600 hover:text-orange-600 transition-colors"
-                            href="#">About Us</a>
-                        <a class="text-sm text-gray-600 hover:text-orange-600 transition-colors"
-                            href="#">Contact</a>
-                        <a class="text-sm text-gray-600 hover:text-orange-600 transition-colors"
-                            href="#">Privacy Policy</a>
-                        <a class="text-sm text-gray-600 hover:text-orange-600 transition-colors"
-                            href="#">Terms of Service</a>
-                    </div>
-                </div>
-            </div>
-        </footer>
+        {% include 'events/partials/footer.html' %}
     </div>
 
 

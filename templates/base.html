@@ -33,10 +33,24 @@
     
 </head>
 <body class="bg-gray-50 text-gray-800 antialiased  x-cloak">
+    <!-- Global Loader -->
+<!-- Global Loader (place immediately after <body>) -->
+<div id="page-loader" class="fixed inset-0 bg-black/70 flex items-center justify-center z-[9999] hidden">
+  <div class="flex-col gap-4 w-full flex items-center justify-center">
+    <div class="w-20 h-20 border-4 border-transparent text-pink-500 text-4xl animate-spin flex items-center justify-center border-t-pink-500 rounded-full">
+      <div class="w-16 h-16 border-4 border-transparent text-purple-400 text-2xl animate-spin flex items-center justify-center border-t-purple-400 rounded-full"></div>
+    </div>
+  </div>
+</div>
+
+
     {% include "events/partials/alerts.html" %}
     
     {% block content %}
     {% endblock %}
+
+
+
 
     <script src="/static/js/main.js"></script>
 </body>

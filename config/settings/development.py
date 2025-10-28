@@ -20,16 +20,16 @@ SECRET_KEY = env("SECRET_KEY")
 # Database - local sqlite by default (easy, zero config)
 # -----------------------------------------------------------------------------
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 # DATABASES = {
-#     'default': env.db('DATABASE_URL', default=''),
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
 # }
+
+DATABASES = {
+    'default': env.db('DATABASE_URL', default=''),
+}
 
 
 # -----------------------------------------------------------------------------
@@ -39,11 +39,12 @@ DATABASES = {
 STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
 
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'ddns4ydis',
-    'API_KEY': '633339777439151',
-    'API_SECRET': 'Dj447P7tk2i1NP2WEXo_4cTp1Jk',
-}
+# CLOUDINARY_STORAGE = {
+#     'CLOUD_NAME': 'ddns4ydis',
+#     'API_KEY': '633339777439151',
+#     'API_SECRET': 'Dj447P7tk2i1NP2WEXo_4cTp1Jk',
+# }
+CLOUDINARY_URL = env("CLOUDINARY_URL")
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 # -----------------------------------------------------------------------------

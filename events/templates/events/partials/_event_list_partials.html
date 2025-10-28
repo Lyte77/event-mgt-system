@@ -1,50 +1,75 @@
 
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+<section class="py-12 md:py-16 bg-gray-50">
+  <div class="container mx-auto px-4 sm:px-6">
+    <!-- Section Heading -->
+    <h2 class="text-2xl md:text-3xl font-bold tracking-tighter text-gray-900 mb-6 md:mb-8">
+      Popular Events
+    </h2>
 
-    {% for event in events %}
-<div
-class="group flex flex-col bg-white rounded-xl shadow-md overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-    <div class="relative">
-        <div class="w-full h-48 bg-center bg-cover" style='background-image: url("{{ event.event_image.url }}");'>
+    <!-- Events Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mb-20">
+      {% for event in events %}
+      <div
+        class="group flex flex-col bg-white rounded-xl shadow-md overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+        <div class="relative">
+          <div class="w-full h-48 bg-center bg-cover"
+            style='background-image: url("{{ event.event_image.url }}");'>
+          </div>
+          <div
+            class="absolute top-2 right-2 bg-white/90 rounded-full p-2.5 shadow-sm text-center leading-none">
+            <p class="text-xs sm:text-sm font-bold text-[var(--brand-accent)]">{{ event.start_time }}</p>
+          </div>
         </div>
-        <div class="absolute top-2 right-2 bg-white/90 rounded-full p-2.5 shadow-sm text-center leading-none">
-            <p class="text-xs sm:text-sm font-bold text-[var(--brand-accent)]">{{ event.start_time }}
-            </p>
-            <p class="text-lg sm:text-xl font-extrabold text-gray-900 -mt-1"></p>
-        </div>
-    </div>
-    <div class="p-4 sm:p-5 flex flex-col flex-grow">
-        <h3
+
+        <div class="p-4 sm:p-5 flex flex-col flex-grow">
+          <h3
             class="text-base sm:text-lg font-bold text-gray-900 mb-1 group-hover:text-[var(--brand-accent)] transition-colors">
-            {{ event.title }}</h3>
-        <p class="text-sm text-gray-600 mb-4">{{ event.venue }}</p>
-        <p class="text-sm text-gray-500 mt-auto">From $199</p>
-    </div>
-    <div class="mt-4">
-        <a href="{% url 'events:event_detail' event.slug %}"
-            class="inline-flex w-full sm:w-auto justify-center rounded-lg bg-orange-600  px-4 py-2 text-sm font-medium text-white shadow-md  transition">
+            {{ event.title }}
+          </h3>
+          <p class="text-sm text-gray-600 mb-4">{{ event.venue }}</p>
+          <p class="text-sm text-gray-500 mt-auto">From $199</p>
+        </div>
+
+        <div class="mt-4 px-4 pb-4">
+          <a href="{% url 'events:event_detail' event.slug %}"
+            class="inline-flex w-full sm:w-auto justify-center rounded-lg bg-orange-600 px-4 py-2 text-sm font-medium text-white shadow-md transition hover:bg-orange-700">
             Get Details
-        </a>
+          </a>
+        </div>
+      </div>
+      {% empty %}
+      <p class="col-span-full text-center text-gray-500 py-10">No events found for this category.</p>
+      {% endfor %}
     </div>
-</div>
-{% empty %}
-     <p>No events found for this category.</p>
-{% endfor %}
-</div>
 
-<div class="flex items-center justify-center gap-2 pt-8">
-    {% if events.has_previous %}
-    <a href="?page={{ events.previous_page_number }}"
-        class="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-orange-100">Previous</a>
-    {% endif %}
+    <!-- Pagination -->
+    <div class="mt-16 pt-16 flex items-center justify-center gap-3">
+      {% if events.has_previous %}
+        <a href="?page={{ events.previous_page_number }}"
+          class="flex items-center justify-center px-4 h-10 rounded-full bg-orange-50 text-orange-700 font-medium hover:bg-orange-100 hover:text-orange-800 transition-all shadow-sm">
+          ‹ Prev
+        </a>
+      {% else %}
+        <span class="flex items-center justify-center px-4 h-10 rounded-full bg-gray-100 text-gray-400 font-medium cursor-not-allowed">
+          ‹ Prev
+        </span>
+      {% endif %}
 
-    <span class=" px-3 flexitems-center justify-center rounded-full bg-orange-600 text-white">Page {{ events.number }}
-        of {{ events.paginator.num_pages }}</span>
+      <span class="flex items-center justify-center px-4 h-10 rounded-full bg-orange-600 text-white font-semibold shadow-md">
+        Page {{ events.number }} of {{ events.paginator.num_pages }}
+      </span>
 
-    {% if events.has_next %}
-    <a href="?page={{ events.next_page_number }}"
-        class="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-orange-100"
-        
-        >Next</a>
-    {% endif %}
-</div>
+      {% if events.has_next %}
+        <a href="?page={{ events.next_page_number }}"
+          class="flex items-center justify-center px-4 h-10 rounded-full bg-orange-50 text-orange-700 font-medium hover:bg-orange-100 hover:text-orange-800 transition-all shadow-sm">
+          Next ›
+        </a>
+      {% else %}
+        <span class="flex items-center justify-center px-4 h-10 rounded-full bg-gray-100 text-gray-400 font-medium cursor-not-allowed">
+          Next ›
+        </span>
+      {% endif %}
+    </div>
+
+    
+</section>

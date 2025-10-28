@@ -6,10 +6,14 @@ from django.utils.timezone import now
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ['title','description','event_image','venue','start_time', 'end_time', 'capacity']
+        fields = [ 'categories', 'title','description','event_image','venue','start_time', 'end_time', 'capacity']
         exclude = ['organizer','status']
 
         widgets = {
+            'categories': forms.CheckboxSelectMultiple(attrs={  
+                'class': 'w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:outline-none bg-white',
+            }),
+
             'title':forms.TextInput(attrs={
                 'class':'w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2  focus:outline-none',
                 'placeholder':'Enter event title'

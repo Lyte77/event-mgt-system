@@ -130,3 +130,5 @@ function dashboard(){
     const redirect = evt.detail.xhr.getResponseHeader('HX-Redirect');
     if (redirect) window.location.href = redirect;
   });
+
+

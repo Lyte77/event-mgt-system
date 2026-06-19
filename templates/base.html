@@ -1,5 +1,5 @@
 {% load static  %}
-
+ {% load django_htmx %}
 <!DOCTYPE html>
 <html lang="en" x-data="{ sidebarOpen: false, createEventModal: false, editEventModal: false, createTicketModal: false, activeEvent: null }">
 <head>
@@ -14,8 +14,9 @@
    
 
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="{% static  'dist/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'src/output.css' %}">
     <link href="{% static 'css/main.css' %}" rel="stylesheet">
+     <script src="{% static 'js/admin.js' %}" defer></script>
     
        
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.0/dist/alpine.min.js" defer></script>
@@ -30,9 +31,9 @@
     <title>Eventura - Discover Events</title>
     
  
-    
+    {% htmx_script %}
 </head>
-<body class="bg-gray-50 text-gray-800 antialiased  x-cloak">
+<body class="bg-gray-50 text-gray-800 antialiased  x-cloak ">
     <!-- Global Loader -->
 <!-- Global Loader (place immediately after <body>) -->
 <div id="page-loader" class="fixed inset-0 bg-black/70 flex items-center justify-center z-[9999] hidden">
@@ -52,6 +53,7 @@
 
 
 
-    <script src="/static/js/main.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+   
 </body>
 </html>

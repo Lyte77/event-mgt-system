@@ -1,0 +1,265 @@
+<!-- 1. SIDEBAR NAVIGATION -->
+<aside id="sidebar-main"
+       class="bg-white text-[#1f2937] flex flex-col transition-all duration-300 ease-in-out shrink-0 border-r border-[#e5e7eb] z-40 w-64 fixed h-full inset-y-0 left-0 -translate-x-full md:relative md:translate-x-0">
+  
+  <!-- Brand/Platform Header -->
+  <div class="h-16 flex items-center justify-between px-4 border-b border-[#e5e7eb]">
+    <div class="flex items-center space-x-3 overflow-hidden">
+      <!-- Brand Logo Mark styled in brand-primary (#ff5500) -->
+      <div class="w-8 h-8 rounded-lg bg-brand flex items-center justify-center shrink-0">
+    <span class="font-bold text-white tracking-wider text-base">E</span>
+      </div>
+      <a href="{% url 'events:home' %}">
+      <span class="font-display font-bold text-base tracking-wide text-[#1f2937] transition-opacity duration-300 transform nav-label">
+      Eventura <span class="text-brand"></span>
+      </span>
+      </a>
+    </div>
+    <!-- Collapse Button for desktops & Close Button for mobile devices -->
+    <div class="flex items-center">
+      <button id="toggle-sidebar-collapse"
+              onclick="toggleSidebarMain()"
+              class="hidden md:flex p-1.5 rounded-lg text-[#6b7280] hover:bg-gray-50 hover:text-[#1f2937] transition-colors focus:outline-none focus:ring-1 focus:ring-brand cursor-pointer">
+        <svg class="w-5 h-5 toggle-arrow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+        </svg>
+      </button>
+      <button id="close-mobile-sidebar"
+              onclick="toggleMobileSidebar()"
+              class="md:hidden p-1.5 rounded-lg text-[#6b7280] hover:bg-gray-50 hover:text-[#1f2937] transition-colors focus:outline-none focus:ring-1 focus:ring-brand cursor-pointer"
+              aria-label="Close sidebar">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Sidebar Navigation Items -->
+  <nav class="flex-1 overflow-y-auto p-4 space-y-1">
+    
+    <!-- Item: Dashboard Overview -->
+    <button id="nav-item-dashboard"
+            hx-get="{% url 'admin_panel:dashboard' %}"
+            hx-target="#content"
+            hx-push-url="true"
+            onclick="updateActiveNav(this)"
+            class="nav-link w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all focus:outline-none cursor-pointer {% if current_tab == 'dashboard' %}bg-orange-50 text-brand font-medium{% else %}text-[#6b7280] hover:bg-gray-50 hover:text-[#1f2937]{% endif %}">
+      <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" />
+      </svg>
+      <span class="transition-opacity duration-300 nav-label">Dashboard</span>
+    </button>
+
+    <!-- Item: Organizer Applications -->
+    <button id="nav-item-applications"
+            hx-get="{% url 'admin_panel:applications' %}"
+            hx-target="#content"
+            hx-push-url="true"
+            onclick="updateActiveNav(this)"
+            class="nav-link w-full flex items-center justify-between px-4 py-2.5 rounded-lg text-sm transition-all focus:outline-none cursor-pointer {% if current_tab == 'applications' %}bg-orange-50 text-brand font-medium{% else %}text-[#6b7280] hover:bg-gray-50 hover:text-[#1f2937]{% endif %}">
+      <div class="flex items-center gap-3">
+        <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        <span class="transition-opacity duration-300 nav-label">Organizer Apps</span>
+      </div>
+      <!-- Notification badge for Pending organizer applications -->
+      {% if kpi.pending_apps > 0 %}
+      <span id="sidebar-app-badge"
+            class="bg-brand text-white text-[10px] font-bold px-2 py-0.5 rounded-full nav-label">
+        {{ kpi.pending_apps }}
+      </span>
+      {% endif %}
+    </button>
+
+    <!-- Item: Users Management -->
+    <button id="nav-item-users"
+            hx-get="{% url 'admin_panel:users' %}"
+            hx-target="#content"
+            hx-push-url="true"
+            onclick="updateActiveNav(this)"
+            class="nav-link w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all focus:outline-none cursor-pointer {% if current_tab == 'users' %}bg-orange-50 text-brand font-medium{% else %}text-[#6b7280] hover:bg-gray-50 hover:text-[#1f2937]{% endif %}">
+      <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+      </svg>
+      <span class="transition-opacity duration-300 nav-label">Users</span>
+    </button>
+
+    <!-- Item: Events Control Center -->
+    <button id="nav-item-events"
+            hx-get="{% url 'admin_panel:events' %}"
+            hx-target="#content"
+            hx-push-url="true"
+            onclick="updateActiveNav(this)"
+            class="nav-link w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all focus:outline-none cursor-pointer {% if current_tab == 'events' %}bg-orange-50 text-brand font-medium{% else %}text-[#6b7280] hover:bg-gray-50 hover:text-[#1f2937]{% endif %}">
+      <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+      </svg>
+      <span class="transition-opacity duration-300 nav-label">Events Control</span>
+    </button>
+
+    <!-- Item: Validators -->
+    <button id="nav-item-validators"
+            hx-get="/admin/validators/"
+            hx-target="#content"
+            hx-push-url="true"
+            onclick="updateActiveNav(this)"
+            class="nav-link w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all focus:outline-none cursor-pointer {% if current_tab == 'validators' %}bg-orange-50 text-brand font-medium{% else %}text-[#6b7280] hover:bg-gray-50 hover:text-[#1f2937]{% endif %}">
+      <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+      </svg>
+      <span class="transition-opacity duration-300 nav-label">Validators</span>
+    </button>
+
+    <!-- Item: Analytics -->
+    <button id="nav-item-analytics"
+            hx-get="/admin/analytics/"
+            hx-target="#content"
+            hx-push-url="true"
+            onclick="updateActiveNav(this)"
+            class="nav-link w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all focus:outline-none cursor-pointer {% if current_tab == 'analytics' %}bg-orange-50 text-brand font-medium{% else %}text-[#6b7280] hover:bg-gray-50 hover:text-[#1f2937]{% endif %}">
+      <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10a2 2 0 01-2 2h-2a2 2 0 01-2-2zm9-1v-8a2 2 0 00-2-2h-2a2 2 0 00-2 2v8a2 2 0 002 2h2a2 2 0 002-2z" />
+      </svg>
+      <span class="transition-opacity duration-300 nav-label">Analytics</span>
+    </button>
+
+    <!-- Item: System Settings -->
+    <button id="nav-item-settings"
+            hx-get="/admin/settings/"
+            hx-target="#content"
+            hx-push-url="true"
+            onclick="updateActiveNav(this)"
+            class="nav-link w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all focus:outline-none cursor-pointer {% if current_tab == 'settings' %}bg-orange-50 text-brand font-medium{% else %}text-[#6b7280] hover:bg-gray-50 hover:text-[#1f2937]{% endif %}">
+      <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.574c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+      <span class="transition-opacity duration-300 nav-label">Settings</span>
+    </button>
+  </nav>
+
+  <!-- Sidebar Footer Status Panel -->
+  <div class="p-4 border-t border-[#e5e7eb] text-xs text-[#6b7280] overflow-hidden shrink-0 space-y-1.5">
+    <div class="flex items-center space-x-2">
+      <span class="w-2 h-2 rounded-full bg-[#10b981] animate-pulse"></span>
+      <span class="font-mono text-[10px] nav-label">SYNCED TO NODE V1</span>
+    </div>
+    <div class="text-[9px] font-mono leading-none tracking-tight text-[#6b7280] uppercase nav-label">
+      © VANGUARD INTEL 
+    </div>
+  </div>
+</aside>
+
+<!-- Sidebar mobile backdrop overlay -->
+<div id="sidebar-backdrop"
+     onclick="toggleMobileSidebar()"
+     class="fixed inset-0 bg-slate-900/40 z-30 opacity-0 pointer-events-none md:hidden transition-all duration-300"></div>
+
+<style>
+  #sidebar-main {
+    width: 16rem; /* w-64 */
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), translate 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  #sidebar-main.sidebar-collapsed {
+    width: 4rem; /* w-16 */
+  }
+  #sidebar-main .nav-label {
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 0.2s ease, transform 0.2s ease, width 0.2s ease;
+  }
+
+  #sidebar-main .toggle-arrow {
+    transition: transform 0.3s ease;
+  }
+
+  #sidebar-main.sidebar-collapsed .nav-label {
+    opacity: 0;
+    width: 0;
+    max-width: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transform: translateX(-10px);
+  }
+
+  @media (max-width: 767px) {
+
+  #sidebar-main.sidebar-collapsed .nav-label {
+      opacity: 1 !important;
+      width: auto !important;
+      max-width: none !important;
+      overflow: visible !important;
+      pointer-events: auto !important;
+      transform: translateX(0) !important;
+  }
+
+}
+  #sidebar-main .toggle-arrow {
+    transition: transform 0.3s ease;
+  }
+  #sidebar-main.sidebar-collapsed .toggle-arrow {
+    transform: rotate(180deg);
+  }
+
+   @media (max-width: 767px) {
+    #sidebar-main {
+      width: 16rem !important; /* Prevent collapsing layout on mobile devices */
+    }
+    #sidebar-main.mobile-active {
+      transform: translateX(0) !important;
+      translate: 0 0 !important;
+    }
+  }
+
+</style>
+
+<script>
+  function toggleSidebarMain() {
+    const sidebar = document.getElementById('sidebar-main');
+    sidebar.classList.toggle('sidebar-collapsed');
+    
+    // Save in session state
+    localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('sidebar-collapsed'));
+  }
+
+  function toggleMobileSidebar() {
+    const sidebar = document.getElementById('sidebar-main');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    if (!sidebar || !backdrop) return;
+
+    const isActive = sidebar.classList.toggle('mobile-active');
+    if (isActive) {
+      backdrop.classList.remove('opacity-0', 'pointer-events-none');
+      backdrop.classList.add('opacity-100', 'pointer-events-auto');
+    } else {
+      backdrop.classList.remove('opacity-100', 'pointer-events-auto');
+      backdrop.classList.add('opacity-0', 'pointer-events-none');
+    }
+  }
+
+  // Restore sidebar expand/collapse state from storage on page load
+  (function() {
+    const collapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+    const sidebar = document.getElementById('sidebar-main');
+    if (collapsed && sidebar) {
+      sidebar.classList.add('sidebar-collapsed');
+    }
+  })();
+
+  function updateActiveNav(btn) {
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.classList.remove('bg-orange-50', 'text-brand', 'font-medium');
+      link.classList.add('text-[#6b7280]', 'hover:bg-gray-50', 'hover:text-[#1f2937]');
+    });
+    btn.classList.add('bg-orange-50', 'text-brand', 'font-medium');
+    btn.classList.remove('text-[#6b7280]', 'hover:bg-gray-50', 'hover:text-[#1f2937]');
+
+    // Auto close mobile sidebar on nav click
+    const sidebar = document.getElementById('sidebar-main');
+    if (sidebar && sidebar.classList.contains('mobile-active')) {
+      toggleMobileSidebar();
+    }
+  }
+</script>

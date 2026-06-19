@@ -1,0 +1,80 @@
+<!-- 2. PLATFORM ADMINISTRATIVE HEADER -->
+<header class="h-16 bg-white border-b border-[#e5e7eb] flex items-center justify-between px-4 sm:px-6 shrink-0 select-none">
+  
+  <!-- Left Side: Breadcrumb Path indicators & Mobile Toggle -->
+  <div class="flex items-center space-x-1.5 sm:space-x-2.5">
+    <!-- Mobile Sidebar Toggle Hamburger Button -->
+    <button id="mobile-sidebar-toggle"
+            onclick="toggleMobileSidebar()"
+            class="md:hidden p-1.5 -ml-1 mr-1 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-800 transition-colors focus:outline-none focus:ring-1 focus:ring-brand cursor-pointer shrink-0"
+            aria-label="Toggle sidebar menu">
+      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+    <!-- Section Indicator -->
+    <span class="hidden sm:inline text-[11px] font-mono uppercase tracking-wider font-bold text-slate-400">OPERATIONS CONTROL</span>
+    <span class="hidden sm:inline text-slate-300">/</span>
+    <span id="breadcrumb-tab" class="text-xs font-bold font-mono uppercase tracking-wide text-slate-800">
+      {% if current_tab == 'dashboard' %}SYSTEM OVERVIEW
+      {% elif current_tab == 'applications' %}ORGANIZER CREDENTIALS
+      {% elif current_tab == 'users' %}PROFILE DECREES
+      {% elif current_tab == 'events' %}EVENT COMMAND
+      {% elif current_tab == 'validators' %}SCANNING PERSONNEL
+      {% elif current_tab == 'analytics' %}SYSTEM METRICS
+      {% elif current_tab == 'settings' %}GLOBAL DIRECTIVES
+      {% else %}OVERVIEW{% endif %}
+    </span>
+  </div>
+
+  <!-- Right Side: Live Clock, Active Keys, and Admin Profile -->
+  <div class="flex items-center space-x-3 sm:space-x-6">
+    
+    <!-- Real-time Terminal UTC Synchronizer Clock -->
+    <div class="hidden md:flex flex-col items-end border-r border-[#e5e7eb] pr-6">
+      <span class="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest leading-none">SERVER TIME (UTC)</span>
+      <span id="live-utc-clock" class="text-[#1f2937] font-mono text-xs font-semibold mt-1">2026-06-15 18:12:00 UTC</span>
+    </div>
+
+    <!-- Active Administrator Account Badge -->
+    <div class="flex items-center space-x-2 sm:space-x-3">
+      <!-- Operator Info -->
+      <div class="hidden sm:flex text-right flex-col justify-center">
+        <span class="text-xs font-bold text-slate-900 leading-tight">Vanguard Supervisor</span>
+        <span class="text-[10px] font-mono text-[#6b7280] leading-none mt-0.5 uppercase font-medium">Clearance level 1</span>
+      </div>
+      
+      <!-- Avatar styled with green online halo indicator -->
+      <div class="relative shrink-0">
+        <img class="w-8 h-8 rounded-full border border-slate-200 object-cover" 
+             src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
+             alt="Admin Staff" />
+        <!-- Halo online signal indicators -->
+        <span class="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full bg-[#10b981] border-2 border-white ring-0"></span>
+      </div>
+    </div>
+
+  </div>
+</header>
+
+<script>
+  // Simple, robust ticking UTC clock for enterprise tracking
+  function tickLiveClock() {
+    const clockEl = document.getElementById('live-utc-clock');
+    if (!clockEl) return;
+    
+    const now = new Date();
+    const utcYear = now.getUTCFullYear();
+    const utcMonth = String(now.getUTCMonth() + 1).padStart(2, '0');
+    const utcDay = String(now.getUTCDate()).padStart(2, '0');
+    const utcHours = String(now.getUTCHours()).padStart(2, '0');
+    const utcMinutes = String(now.getUTCMinutes()).padStart(2, '0');
+    const utcSeconds = String(now.getUTCSeconds()).padStart(2, '0');
+    
+    clockEl.textContent = `${utcYear}-${utcMonth}-${utcDay} ${utcHours}:${utcMinutes}:${utcSeconds} UTC`;
+  }
+  
+  // Ticks immediately and sets intervals
+  tickLiveClock();
+  setInterval(tickLiveClock, 1000);
+</script>

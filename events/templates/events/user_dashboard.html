@@ -53,10 +53,10 @@
                             <i class="fas fa-calendar-check mr-3"></i>
                             Edit Profile
                         </a>
-                        <a href="{% url 'events:create_event' %}"
+                        <a href="{% url 'accounts:apply_organizer' %}"
                             class="flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-orange-700 text-white">
                             <i class="fas fa-calendar-check mr-3"></i>
-                            Create Event
+                            Become an Organizer
                         </a>
 
                         <a href="{% url 'account_logout' %}"
@@ -99,6 +99,11 @@
                         class="flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-orange-700 text-white">
                         <i class="fas fa-calendar-check mr-3"></i>
                         Edit Profile
+                    </a>
+                    <a href="{% url 'accounts:apply_organizer' %}"
+                        class="flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-orange-700 text-white">
+                        <i class="fas fa-calendar-check mr-3"></i>
+                        Become an Organizer
                     </a>
                   
 

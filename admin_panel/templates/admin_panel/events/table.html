@@ -1,0 +1,94 @@
+<div class="overflow-x-auto select-none">
+  <table class="w-full text-left border-collapse text-xs font-medium">
+    <thead>
+      <tr class="bg-slate-50 text-slate-400 font-semibold border-b border-slate-100 uppercase tracking-wider text-[10px]">
+        <th class="p-4 pl-6">Platform Event Mission Details</th>
+        <th class="p-4">Organizer Creator</th>
+        <th class="p-4">Roster Registrations</th>
+        <th class="p-4">Public Status Badge</th>
+        <th class="p-4 pr-6 text-right">Moderations Protocols</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+      {% for ev in events %}
+      <tr class="hover:bg-slate-50/50 transition-colors">
+        
+        <!-- Mission details -->
+        <td class="p-4 pl-6">
+          <span class="font-bold text-slate-900 text-sm block leading-tight">{{ ev.title }}</span>
+          <span class="text-slate-500 text-[10px] font-mono leading-relaxed max-w-sm block truncate mt-1">{{ ev.desc }}</span>
+          <span class="text-slate-400 text-[10px] font-mono font-semibold block mt-1.5 uppercase">LAUNCH DATE: {{ ev.date }}</span>
+        </td>
+
+        <!-- Organizer name -->
+        <td class="p-4 text-slate-800 font-semibold text-center">{{ ev.organizer.username }}</td>
+
+        <!-- Registration progress capacity bars -->
+        <td class="p-4">
+          <div class="flex items-center space-x-2.5">
+            <div class="w-24 bg-slate-100 h-2 rounded-full overflow-hidden border border-slate-200/50">
+              <div class="h-2 rounded-full bg-brand" style="width: 76%;"></div>
+            </div>
+            <span class="text-[11px] font-mono text-slate-800 whitespace-nowrap">
+              {{ ev.attendees_count }} / {{ ev.capacity }}
+            </span>
+          </div>
+        </td>
+
+        <!-- Public status badge -->
+        <td class="p-4">
+          <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold block w-fit
+                       {% if ev.status == 'Active' %}bg-emerald-50 text-emerald-700 border border-emerald-150
+                       {% elif ev.status == 'Disabled' %}bg-rose-50 text-rose-700 border border-rose-150
+                       {% else %}bg-slate-100 text-slate-650 border border-slate-200{% endif %}">
+            {{ ev.status }}
+          </span>
+        </td>
+
+        <!-- Action Links -->
+        <td class="p-4 pr-6 text-right whitespace-nowrap space-x-1.5 text-xs font-mono font-bold uppercase tracking-wider">
+          
+          <button onclick="openRoster('{{ ev.title }}')"
+                  class="text-sky-600 hover:text-sky-700 hover:underline cursor-pointer">
+            View Attendees
+          </button>
+          
+          <button onclick="alert('Operations notification override: Edit fields parsed for event ID {{ ev.id }}.');"
+                  class="text-slate-500 hover:text-slate-800 hover:underline cursor-pointer">
+            Edit details
+          </button>
+
+          {% if ev.status == 'Active' %}
+          <button hx-get="/admin/events/{{ ev.id }}/toggle/"
+                  hx-target="#events-table-wrapper"
+                  class="text-rose-600 hover:text-rose-700 hover:underline cursor-pointer">
+            Block Registration
+          </button>
+          <button hx-get="/admin/events/{{ ev.id }}/force-close/"
+                  hx-target="#events-table-wrapper"
+                  class="text-rose-600 hover:text-rose-700 hover:underline cursor-pointer">
+            Force Close
+          </button>
+          {% elif ev.status == 'Disabled' %}
+          <button hx-get="/admin/events/{{ ev.id }}/toggle/"
+                  hx-target="#events-table-wrapper"
+                  class="text-emerald-600 hover:text-emerald-700 hover:underline cursor-pointer">
+            Unblock
+          </button>
+          {% else %}
+          <span class="text-slate-400 italic">Locked</span>
+          {% endif %}
+
+        </td>
+
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="5" class="p-8 text-center text-slate-400 text-xs">
+          No records found matching the query criteria.
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

@@ -20,16 +20,16 @@ SECRET_KEY = env("SECRET_KEY")
 # Database - local sqlite by default (easy, zero config)
 # -----------------------------------------------------------------------------
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
-    'default': env.db('DATABASE_URL', default=''),
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
+# DATABASES = {
+#     'default': env.db('DATABASE_URL', default=''),
+# }
 
 
 # -----------------------------------------------------------------------------

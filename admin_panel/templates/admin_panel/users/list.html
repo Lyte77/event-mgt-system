@@ -1,0 +1,16 @@
+{% extends "admin_panel/base.html" %}
+
+{% block content %}
+<div class="space-y-6 animate-fade-in gap-4">
+  
+  <!-- Title segment -->
+  <div>
+    <h1 id="users-heading" class="text-2xl font-bold tracking-tight text-slate-900 font-display">Platform Users Management</h1>
+    <p class="text-sm text-slate-500">Revoke system clearances, suspend accounts, and configure global platform credential permissions.</p>
+  </div>
+
+  <!-- Table block controls card -->
+  {% include 'admin_panel/users/table.html' %}
+
+</div>
+{% endblock %}

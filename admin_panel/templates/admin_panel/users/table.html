@@ -1,0 +1,157 @@
+
+
+<div class="bg-white border border-[#e5e7eb] rounded-xl overflow-hidden shadow-sm">
+    
+     
+    <!-- Header control bar -->
+    <div class="p-4 border-b border-[#e5e7eb] flex flex-col md:flex-row gap-4 justify-between items-start md:items-center bg-slate-50/20">
+      
+      <form class="flex flex-col sm:flex-row gap-3 w-full md:w-auto" onsubmit="return false;">
+        
+        <!-- Live username/email search parameters -->
+        <div class="relative w-full sm:w-64">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </span>
+          <input type="text"
+                 name="q"
+                 id="search-users"
+                 placeholder="Search name, email details..."
+                 hx-get="/admin/users/?table=1"
+                 hx-target="#users-table-wrapper"
+                 hx-trigger="keyup changed delay:250ms, search"
+                 class="w-full text-xs border border-slate-200 rounded-lg pl-9 pr-4 py-2 bg-white focus:outline-none focus:ring-1 focus:ring-brand focus:border-brand" />
+        </div>
+        
+        <!-- Filter select options -->
+        <select name="role"
+                id="filter-user-role"
+                hx-get="/admin/users/?table=1"
+                hx-target="#users-table-wrapper"
+                hx-trigger="change"
+                class="text-xs border border-slate-200 rounded-lg py-2 px-3 bg-white text-slate-700 font-medium outline-none focus:ring-1 focus:ring-brand focus:border-brand">
+          <option value="all">All Roles & Profiles</option>
+          <option value="Attendee">Attendee Accounts</option>
+          <option value="Organizer">Platform Organizers</option>
+          <option value="Validator">Validator Operations</option>
+          <option value="Suspended">Suspended Profiles</option>
+        </select>
+
+      </form>
+
+      <span class="text-slate-500 text-xs font-semibold uppercase font-mono">
+        User Registry Databases
+      </span>
+    </div>
+
+    <!-- UTILITY WRAPPER HOOKED FOR DYNAMIC SWAPPING -->
+    
+
+ 
+
+
+<div class="overflow-x-auto select-none">
+  <table class="w-full text-left border-collapse text-xs">
+    <thead>
+      <tr class="bg-slate-50 text-slate-400 font-semibold border-b border-slate-100 uppercase tracking-wider text-[10px]">
+        <th class="p-4 pl-6">Platform Profile Details</th>
+        <th class="p-4">Assigned Role Authority</th>
+        <th class="p-4">Active System Status</th>
+        <th class="p-4 text-center">Events Hosted Count</th>
+        <th class="p-4">Last Authentication Heartbeat</th>
+        <th class="p-4 pr-6 text-right">Security Operations Protocol</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+      {% for user in users %}
+      <tr class="hover:bg-slate-50/50 transition-colors">
+        
+        <!-- Profile Identity Card wrapper -->
+        <td class="p-4 pl-6">
+          <div class="flex items-center space-x-3.5">
+            <img class="w-9 h-9 rounded-full object-cover border border-slate-150 shrink-0" src="{{ user.avatar }}" />
+            <div>
+              <span class="font-bold text-slate-900 text-sm block leading-tight">{{ user.username }}</span>
+              <span class="text-slate-400 font-mono text-[10px] block mt-0.5">{{ user.email }}</span>
+            </div>
+          </div>
+        </td>
+
+        <!-- Assigned Role authority badge -->
+        <td class="p-4">
+          <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold block w-fit
+                       {% if user.role == 'Admin' %}bg-indigo-50 text-indigo-700 border border-indigo-150
+                       {% elif user.role == 'Organizer' %}bg-sky-50 text-sky-700 border border-sky-150
+                       {% elif user.role == 'Validator' %}bg-emerald-50 text-emerald-700 border border border-emerald-150
+                       {% else %}bg-slate-100 text-slate-700 border border-slate-200{% endif %}">
+            {{ user.role }}
+          </span>
+        </td>
+
+        <!-- Active Security Status Badge -->
+        <td class="p-4">
+          <span class="px-2 py-0.5 rounded-md text-[10px] font-bold block w-fit
+                       {% if user.status == 'Active' %}bg-emerald-50 text-emerald-700 border border-emerald-100
+                       {% else %}bg-rose-50 text-rose-700 border border-rose-100{% endif %}">
+            {{ user.status }}
+          </span>
+        </td>
+
+        <!-- Events created stats -->
+        <td class="p-4 font-mono text-slate-600 text-xs text-center">{{ user.events_count }}</td>
+
+        <!-- Last signature logins -->
+        <td class="p-4 text-slate-500 font-mono text-[11px]">2026-06-15 17:42:10 UTC</td>
+
+        <!-- Action tools -->
+        <td class="p-4 pr-6 text-right whitespace-nowrap space-x-1.5 text-xs font-mono font-bold uppercase tracking-wider">
+          
+          {% if user.role == 'Attendee' and user.status == 'Active' %}
+          <button hx-get="/admin/users/{{ user.id }}/promote/"
+                  hx-target="#users-table-wrapper"
+                  class="text-emerald-600 hover:text-emerald-700 hover:underline cursor-pointer">
+            Promote to Org
+          </button>
+          {% elif user.role == 'Organizer' and user.status == 'Active' %}
+          <button hx-get="/admin/users/{{ user.id }}/demote/"
+                  hx-target="#users-table-wrapper"
+                  class="text-amber-600 hover:text-amber-700 hover:underline cursor-pointer">
+            Demote
+          </button>
+          {% endif %}
+
+          {% if user.status == 'Active' %}
+          <button hx-get="/admin/users/{{ user.id }}/suspend/"
+                  hx-target="#users-table-wrapper"
+                  class="text-rose-600 hover:text-rose-700 hover:underline cursor-pointer">
+            Suspend Account
+          </button>
+          {% else %}
+          <button hx-get="/admin/users/{{ user.id }}/activate/"
+                  hx-target="#users-table-wrapper"
+                  class="text-emerald-600 hover:text-emerald-700 hover:underline cursor-pointer">
+            Revoke Suspension
+          </button>
+          {% endif %}
+
+          <button onclick="alert('Identity verification trigger: Dynamic credential reset code sent to registered gateway.');"
+                  class="text-slate-400 hover:text-slate-700 hover:underline cursor-pointer">
+            Reset pass
+          </button>
+
+        </td>
+
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="6" class="p-8 text-center text-slate-400 text-xs">
+          No user profiles found matching the query arguments.
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+ </div>

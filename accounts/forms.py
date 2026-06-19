@@ -1,16 +1,12 @@
 from allauth.account.forms import SignupForm,LoginForm
 from django_countries.widgets import CountrySelectWidget
 from django import forms 
-from .models import UserProfile
+from .models import UserProfile, OrganizerApplication
 
 
 
 class CustomSignupForm(SignupForm):
-    is_organizer = forms.BooleanField(
-        required=False,
-        label="Signup as an organizer",
-        help_text="Tick this box if you want to create and manage events",
-    )
+  
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -32,11 +28,11 @@ class CustomSignupForm(SignupForm):
                 widget.attrs.update({"class": text_input_class})
 
 
-    def save(self,request):
-        user = super().save(request)
-        user.is_organizer = self.cleaned_data.get("is_organizer")
-        user.save()
-        return user
+    # def save(self,request):
+    #     user = super().save(request)
+    #     user.is_organizer = self.cleaned_data.get("is_organizer")
+    #     user.save()
+    #     return user
     
 
 class CustomLoginForm(LoginForm):
@@ -79,5 +75,17 @@ class UserProfileForm(forms.ModelForm):
             }),
             'profile_pic': CustomClearableFileInput(attrs={
                 'class': 'w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:outline-none'
+            }),
+        }
+
+
+class OrganizerApplicationForm(forms.ModelForm):
+    class Meta:
+        model = OrganizerApplication
+        fields = ["organization_name", "reason"]
+        widgets = {
+            "reason": forms.Textarea(attrs={
+                "rows": 4,
+                "placeholder": "Explain why you want to organize events..."
             }),
         }

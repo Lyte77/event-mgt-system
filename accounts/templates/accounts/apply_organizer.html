@@ -1,0 +1,24 @@
+<!-- templates/accounts/apply_organizer.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+    
+
+    <div class="container mx-auto px-4 py-12">
+        <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
+<h2>Become an Organizer</h2>
+
+<p>
+    Apply to create and manage events. Your request will be reviewed by our admin team.
+</p>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit">
+        Submit Application
+    </button>
+</form>
+
+{% endblock %}

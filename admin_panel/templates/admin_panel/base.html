@@ -1,0 +1,81 @@
+{% load static %}
+{% load django_htmx %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Platform Admin Control Center | Vanguard Events</title>
+    
+    <!-- Premium Google Fonts pairing -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Style configuration -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'src/output.css' %}">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+     <script src="{% static 'js/admin.js' %}" defer></script>
+
+    <!-- HTMX Client Script Import -->
+     <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+    
+     <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    
+    <!-- Inline CSRF token helper setup for HTMX under Django -->
+    <script>
+      document.addEventListener('htmx:configRequest', (event) => {
+        const csrfToken = htmx.cookie('csrftoken') || document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+        if (csrfToken) {
+          event.detail.headers['X-CSRFToken'] = csrfToken;
+        }
+      });
+    </script>
+    {% htmx_script %}
+  </head>
+
+  
+  <body class="bg-[#f8fafc] text-slate-900 font-sans antialiased min-h-screen">
+
+    {% include "partials/messages.html" %}
+    <!-- Global Layout Wrapper -->
+    <div class="flex h-screen overflow-hidden">
+
+      <!-- 1. SIDEBAR NAVIGATION PARTIAL INCLUDE -->
+      {% include "admin_panel/partials/sidebar.html" %}
+
+      <!-- Main Layout Body Section -->
+      <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+
+        <!-- 2. PLATFORM HEADER & BREADCRUMBS -->
+        {% include "admin_panel/partials/header.html" %}
+
+        <!-- Alert Advisory Banner (if pending applications exist) -->
+       <span
+    hx-get="{% url 'admin_panel:alert_notification_banner' %}"
+    hx-trigger="load, every 30s"
+    hx-swap="outerHTML"
+      >
+          Loading...
+      </span>
+
+        <!-- 3. SCROLLABLE CONTAINER FOR PRIMARY VIEWS -->
+        <main class="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8" id="primary-view-container">
+          <div id="content" class="transition-all duration-150">
+            {% block content %}{% endblock %}
+          </div>
+        </main>
+      </div>
+
+    </div>
+
+    <!-- Administrative Modal Slot Target for HTMX dynamic loaders -->
+    <div id="modal-slot" class="fixed inset-0 z-50 pointer-events-none"></div>
+
+    <!-- Static Client-Side Toast Notifications Container -->
+    <div id="toast-alerts-container" class="fixed bottom-6 right-6 z-50 flex flex-col space-y-3 pointer-events-none max-w-sm w-full select-none"></div>
+
+  </body>
+</html>

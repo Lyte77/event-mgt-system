@@ -51,6 +51,7 @@ THIRD_PARTY_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'django_countries',
+    'django_htmx',
     
    
 
@@ -59,6 +60,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     'accounts',
     'events',
+    'admin_panel',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -96,6 +98,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    'django_htmx.middleware.HtmxMiddleware',
 ]
 
 if DEBUG:
@@ -116,6 +119,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                # custom context processors
+                "admin_panel.context_processor.admin_alerts",
             ],
         },
     },
@@ -206,7 +212,7 @@ ACCOUNT_SIGNUP_REDIRECT_URL = "accounts:profile_onboarding"
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "/"
 ACCOUNT_EMAIL_CONFIRMATION_COOLDOWN = 60
 
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "events:dashboard_router"
 # LOGIN_REDIRECT_URL = "events:redirect_after_login"
 LOGOUT_REDIRECT_URL = "/"
 

@@ -140,13 +140,26 @@ def delete_event(request,slug):
         
     
     
-def dashboard_router(request):
-    if request.user.is_authenticated:
-        if request.user.is_organizer:
-            return redirect('events:dashboard')
-        else:
-            return redirect('events:user_dashboard')
+# def dashboard_router(request):
+#     if request.user.is_authenticated:
+#         if request.user.is_organizer:
+#             return redirect('events:dashboard')
+#         else:
+#             return redirect('events:user_dashboard')
 
+def dashboard_router(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    profile = request.user.profile
+
+    if request.user.is_staff:
+        return redirect("admin_panel:dashboard")
+
+    if profile.is_organizer:
+        return redirect('events:dashboard')
+
+    return redirect('events:user_dashboard')
 @login_required
 def organizer_dashboard(request):
     if not request.user.is_organizer:

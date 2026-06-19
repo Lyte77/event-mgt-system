@@ -16,15 +16,23 @@
                     <a class="text-sm font-medium text-gray-600 hover:text-[var(--brand-accent)] transition-colors" href="#">Create an Event</a>
                     <a class="text-sm font-medium text-gray-600 hover:text-[var(--brand-accent)] transition-colors" href="#">Help Center</a>
                     <hr class="my-4"/>
-                    {% if request.user.is_authenticated %}
-                            {% if request.user.is_organizer %}
-                                <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all" href="{% url 'events:dashboard' %}">Dashboard</a>
-                            {% else %}
-                                 <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all" href="{% url 'events:user_dashboard' %}">Dashboard</a>
-                            {% endif %}
+                   {% if request.user.is_authenticated %}
+    
+                        {% if request.user.is_staff %}
+                            <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all" href="{% url 'admin_panel:dashboard' %}">Admin Dashboard</a>
+                        
+                        {% elif request.user.is_organizer %}
+                            <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all" href="{% url 'events:dashboard' %}">Organizer Dashboard</a>
+                        
+                        {% else %}
+                            <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all" href="{% url 'events:user_dashboard' %}">Dashboard</a>
+                        
+                        {% endif %}
+
                     {% else %}
-                            <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all" href="{% url 'account_login' %}">Log In</a>
-                            <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all text-center" href="{% url 'account_signup' %}?=next{% url 'accounts:profile_onboarding' %}">Sign Up</a>
+                        <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all" href="{% url 'account_login' %}">Log In</a>
+                        <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all text-center" href="{% url 'account_signup' %}?next={% url 'accounts:profile_onboarding' %}">Sign Up</a>
+
                     {% endif %}
                 </nav>
             </div>
@@ -57,14 +65,22 @@
                     <div class="flex items-center gap-4">
                         <div class="hidden md:flex items-center gap-4">
                     {% if request.user.is_authenticated %}
-                            {% if request.user.is_organizer %}
-                                <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all" href="{% url 'events:dashboard' %}">Dashboard</a>
-                            {% else %}
-                                 <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all" href="{% url 'events:user_dashboard' %}">Dashboard</a>
-                            {% endif %}
+    
+                        {% if request.user.is_staff %}
+                            <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all" href="{% url 'admin_panel:dashboard' %}">Admin Dashboard</a>
+                        
+                        {% elif request.user.is_organizer %}
+                            <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all" href="{% url 'events:dashboard' %}">Organizer Dashboard</a>
+                        
+                        {% else %}
+                            <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all" href="{% url 'events:user_dashboard' %}">Dashboard</a>
+                        
+                        {% endif %}
+
                     {% else %}
-                            <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all" href="{% url 'account_login' %}">Log In</a>
-                            <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all text-center" href="{% url 'account_signup' %}?=next{% url 'accounts:profile_onboarding' %}">Sign Up</a>
+                        <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all" href="{% url 'account_login' %}">Log In</a>
+                        <a class="rounded-full bg-[var(--brand-accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-opacity-90 transition-all text-center" href="{% url 'account_signup' %}?next={% url 'accounts:profile_onboarding' %}">Sign Up</a>
+
                     {% endif %}
                         </div>
                         <button @click.stop="sidebarOpen = !sidebarOpen" class="md:hidden p-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[var(--brand-accent)]">

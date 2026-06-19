@@ -23,7 +23,9 @@ urlpatterns = [
     path('theboss/', admin.site.urls),
     path('accounts/',include("allauth.urls")),
     path('profile/', include('accounts.urls',namespace='accounts')),
+    path('admin-panel/', include('admin_panel.urls',namespace='admin_panel')),
     path('',include('events.urls',namespace='events'))
+
 ]
 
 if settings.DEBUG:

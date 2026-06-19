@@ -51,6 +51,10 @@ class User(AbstractBaseUser,PermissionsMixin):
     def __str__(self):
         return self.email
     
+    @property
+    def is_organizer(self):
+        return hasattr(self, "profile") and self.profile.is_organizer
+    
 
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='profile')
@@ -61,6 +65,8 @@ class UserProfile(models.Model):
     profile_pic = models.ImageField(upload_to='profile_pics',blank=True,null=True)
     is_organizer = models.BooleanField(default=False) 
     is_completed = models.BooleanField(default=False)
+    
+    
 
     def __str__(self):
         return f"Profile of {self.user.email }"
@@ -71,3 +77,43 @@ class UserProfile(models.Model):
             return self.full_name
         return self.user.email 
     
+
+class OrganizerApplication(models.Model):
+    STATUS_PENDING = "pending"
+    STATUS_APPROVED = "approved"
+    STATUS_REJECTED = "rejected"
+
+    STATUS_CHOICES = [
+        (STATUS_PENDING, "Pending"),
+        (STATUS_APPROVED, "Approved"),
+        (STATUS_REJECTED, "Rejected"),
+    ]
+
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="organizer_application"
+    )
+
+    organization_name = models.CharField(max_length=255)
+    reason = models.TextField()
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default=STATUS_PENDING
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def approve(self):
+        self.status = self.STATUS_APPROVED
+        self.save()
+
+        profile = self.user.profile
+        profile.is_organizer = True
+        profile.save()
+
+    def reject(self):
+        self.status = self.STATUS_REJECTED
+        self.save()

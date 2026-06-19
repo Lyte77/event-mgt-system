@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import UserProfileForm
+from .forms import UserProfileForm,OrganizerApplicationForm
 
 # Create your views here.
 @login_required
@@ -14,7 +14,7 @@ def edit_user_profile(request):
         if form.is_valid():
            profile = form.save(commit=False)
            profile.is_completed = True
-           profile.save()
+           profile.save()   
            return redirect('events:dashboard_router')
         
        
@@ -35,4 +35,24 @@ def edit_user_profile(request):
     return render(request, 'accounts/profile_page.html',context)
 
             
+@login_required
+def apply_organizer(request):
+    user = request.user
 
+    # prevent duplicate applications
+    if hasattr(user, "organizer_application"):
+        messages.error(request, "You have already applied to become an organizer.")
+        return redirect("events:dashboard_router")
+
+    form = OrganizerApplicationForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        application = form.save(commit=False)
+        application.user = user
+        application.save()
+
+        return redirect("events:dashboard_router")
+
+    return render(request, "accounts/apply_organizer.html", {
+        "form": form
+    })

@@ -1,0 +1,12 @@
+<div class="space-y-0.5">
+          <h3 class="font-bold text-sm tracking-wide text-slate-900 uppercase font-display">Applications Pending Audits</h3>
+          <p class="text-[11px] text-slate-500"><span>
+  <strong>{{ pending_count }} organizer applications</strong>
+  are pending review.
+  {% if oldest_age_days %}
+    Oldest application is {{ oldest_age_days }} days old.
+  {% else %}
+    No pending applications.
+  {% endif %}
+</span> .</p>
+        </div>

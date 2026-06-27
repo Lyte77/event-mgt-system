@@ -27,7 +27,7 @@
         hx-swap="innerHTML">
         {% include "admin_panel/partials/applicant_poll.html" %}
         <!-- Link to full list -->
-        <button hx-get="/admin/applications/"
+        <button hx-get="{% url 'admin_panel:pending_applicants' %}"
                 hx-target="#content"
                 hx-push-url="true"
                 class="text-xs font-semibold text-brand hover:text-[#e04b00] hover:underline cursor-pointer">

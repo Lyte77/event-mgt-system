@@ -1,80 +1,4 @@
-<div class="space-y-6 animate-fade-in gap-4">
-  
-  <!-- Title section -->
-  <div>
-    <h1 id="apps-heading" class="text-2xl font-bold tracking-tight text-slate-900 font-display">Organizer Qualification Reviews</h1>
-    <p class="text-sm text-slate-500">Audit, approve and reject corporate applications wishing to issue public credentials and gate access tickets.</p>
-  </div>
-
-  <!-- Management controls card -->
-  <div class="bg-white border border-[#e5e7eb] rounded-xl overflow-hidden shadow-sm">
-    
-    <!-- Controls Header with HTMX search linkages -->
-    <div class="p-4 border-b border-[#e5e7eb] flex flex-col md:flex-row gap-4 justify-between items-start md:items-center bg-slate-50/20">
-      
-      <!-- Live Search & Filtering tools via HTMX parameters -->
-      <form class="flex flex-col sm:flex-row gap-3 w-full md:w-auto" onsubmit="return false;">
-        
-        <!-- Live Search Input -->
-        <div class="relative w-full sm:w-64">
-          <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </span>
-          <input type="text"
-                 name="q"
-                 id="search-applications"
-                 placeholder="Search user, emails, state..."
-                 hx-get="/admin/applications/?table=1"
-                 hx-target="#applications-table-wrapper"
-                 hx-trigger="keyup changed delay:250ms, search"
-                 class="w-full text-xs border border-slate-200 rounded-lg pl-9 pr-4 py-2 bg-white focus:outline-none focus:ring-1 focus:ring-brand focus:border-brand" />
-        </div>
-        
-        <!-- Filter Selector -->
-        <select name="status"
-                id="filter-application-state"
-                hx-get="/admin/applications/?table=1"
-                hx-target="#applications-table-wrapper"
-                hx-trigger="change"
-                class="text-xs border border-slate-200 rounded-lg py-2 px-3 bg-white text-slate-700 font-medium outline-none focus:ring-1 focus:ring-brand focus:border-brand">
-          <option value="all">All Submissions</option>
-          <option value="Pending">Pending Approvals</option>
-          <option value="Approved">Verified Partners</option>
-          <option value="Rejected">Declined Solicitations</option>
-        </select>
-
-      </form>
-
-      <!-- Status counter label -->
-      <span class="text-slate-500 text-xs font-semibold uppercase font-mono">
-        Active Platform Registries
-      </span>
-    </div>
-
-    <!-- 2. TABLE WRAPPER CONTAINER -->
-    
-
-  </div>
-
-</div>
-
-<div class="overflow-x-auto select-none">
-  <table class="w-full text-left border-collapse text-xs">
-    <thead>
-      <tr class="bg-slate-50 text-slate-400 font-semibold border-b border-slate-100 uppercase tracking-wider text-[10px]">
-        <th class="p-4 pl-6 w-10">Details</th>
-        <th class="p-4">Staff Applicant</th>
-        <th class="p-4">Proposed Corporate Unit</th>
-        <th class="p-4">Primary Jurisdiction</th>
-        <th class="p-4">Submission timestamp</th>
-        <th class="p-4">Clearance Status</th>
-        <th class="p-4 pr-6 text-right">Operations Command</th>
-      </tr>
-    </thead>
-    <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
-      {% for app in applications %}
+   {% for app in applications %}
       <tr class="hover:bg-slate-50/50 transition-colors">
         
         <!-- Row Drawer Expander -->
@@ -90,22 +14,22 @@
         <!-- Profile card -->
         <td class="p-4">
           <div class="flex items-center space-x-3.5">
-            <img class="w-9 h-9 rounded-full border border-slate-100 object-cover shrink-0" src="{{ app.avatar }}" />
+            <img class="w-9 h-9 rounded-full border border-slate-100 object-cover shrink-0" src="{{ app.user.profile.profile_pic.url }}" />
             <div>
-              <span class="font-bold text-slate-900 block text-sm leading-tight">{{ app.user_name }}</span>
-              <span class="text-slate-400 text-[10px] block mt-0.5">{{ app.email }}</span>
+              <span class="font-bold text-slate-900 block text-sm leading-tight">{{ app.user.profile.full_name }}</span>
+              <span class="text-slate-400 text-[10px] block mt-0.5">{{ app.user.email }}</span>
             </div>
           </div>
         </td>
 
         <!-- Org name -->
-        <td class="p-4 text-slate-700 font-semibold">{{ app.org_name }}</td>
+        <td class="p-4 text-slate-700 font-semibold">{{ app.organization_name }}</td>
         
         <!-- Country -->
-        <td class="p-4 text-slate-700">{{ app.country }}</td>
+        <td class="p-4 text-slate-700">{{ app.user.profile.country }}</td>
         
         <!-- Date -->
-        <td class="p-4 font-mono text-slate-500 text-[11px]">{{ app.date }}</td>
+        <td class="p-4 font-mono text-slate-500 text-[11px]">{{ app.created_at|date:"M j, Y" }}</td>
         
         <!-- Status badge -->
         <td class="p-4">
@@ -162,11 +86,11 @@
             <div class="space-y-4 border-l border-slate-200 pl-6">
               <div>
                 <h4 class="text-[11px] uppercase tracking-wider font-semibold text-slate-500 mb-0.5">Primary Location Scope</h4>
-                <p class="font-bold text-slate-900 text-xs">{{ app.country }}</p>
+                <p class="font-bold text-slate-900 text-xs">{{ app.user.profile.country }}</p>
               </div>
               <div>
                 <h4 class="text-[11px] uppercase tracking-wider font-semibold text-slate-500 mb-0.5">Corporate Communications</h4>
-                <p class="text-slate-805 font-mono text-xs">{{ app.email }}</p>
+                <p class="text-slate-805 font-mono text-xs">{{ app.user.profile.phone }}</p>
               </div>
               
               {% if app.status == 'Rejected' %}
@@ -204,6 +128,3 @@
         </td>
       </tr>
       {% endfor %}
-    </tbody>
-  </table>
-</div>

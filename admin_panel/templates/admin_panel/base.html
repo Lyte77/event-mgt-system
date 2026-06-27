@@ -64,7 +64,10 @@
         <!-- 3. SCROLLABLE CONTAINER FOR PRIMARY VIEWS -->
         <main class="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8" id="primary-view-container">
           <div id="content" class="transition-all duration-150">
-            {% block content %}{% endblock %}
+            {% block content %}
+            
+            {% include "admin_panel/dashboard/overview.html" %}       
+            {% endblock %}
           </div>
         </main>
       </div>

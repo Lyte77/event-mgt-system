@@ -56,14 +56,24 @@ class User(AbstractBaseUser,PermissionsMixin):
         return hasattr(self, "profile") and self.profile.is_organizer
     
 
+
+class UserRole(models.TextChoices):
+    ATTENDEE = "ATTENDEE"
+    ORGANIZER = "ORGANIZER"
+    VALIDATOR = "VALIDATOR"
+    MODERATOR = "MODERATOR"
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='profile')
     full_name = models.CharField(max_length=120,blank=True)
     country = CountryField(blank_label="(Select country)")
     phone = models.CharField(max_length=20,blank=True)
     about_organizer = models.TextField(blank=True,null=True,)
+    role = models.CharField(max_length=20,choices=UserRole.choices,default=UserRole.ATTENDEE)
     profile_pic = models.ImageField(upload_to='profile_pics',blank=True,null=True)
     is_organizer = models.BooleanField(default=False) 
+    is_validator = models.BooleanField(default=False)
     is_completed = models.BooleanField(default=False)
     
     
@@ -94,17 +104,17 @@ class OrganizerApplication(models.Model):
         on_delete=models.CASCADE,
         related_name="organizer_application"
     )
-
     organization_name = models.CharField(max_length=255)
     reason = models.TextField()
-
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
         default=STATUS_PENDING
     )
-
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.email} - {self.organization_name} ({self.status})"
 
     def approve(self):
         self.status = self.STATUS_APPROVED

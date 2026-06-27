@@ -1,0 +1,45 @@
+{% include "admin_panel/applications/_filters.html" %}
+
+<div class="space-y-6 animate-fade-in gap-4">
+  
+  <!-- Title section -->
+  <div>
+    <h1 id="apps-heading" class="text-2xl font-bold tracking-tight text-slate-900 font-display">Organizer Qualification Reviews</h1>
+    <p class="text-sm text-slate-500">Audit, approve and reject corporate applications wishing to issue public credentials and gate access tickets.</p>
+  </div>
+
+  <div class="bg-white border border-[#e5e7eb] rounded-xl overflow-hidden shadow-sm">
+    
+    
+    <div class="p-4 border-b border-[#e5e7eb] flex flex-col md:flex-row gap-4 justify-between items-start md:items-center bg-slate-50/20">
+          
+      <span class="text-slate-500 text-xs font-semibold uppercase font-mono">
+        Active Platform Registries
+      </span>
+    </div>
+  </div>
+
+</div>
+
+<div class="overflow-x-auto select-none">
+  <table class="w-full text-left border-collapse text-xs">
+    <thead>
+      <tr class="bg-slate-50 text-slate-400 font-semibold border-b border-slate-100 uppercase tracking-wider text-[10px]">
+        <th class="p-4 pl-6 w-10">Details</th>
+        <th class="p-4">Staff Applicant</th>
+        <th class="p-4">Proposed Corporate Unit</th>
+        <th class="p-4">Primary Jurisdiction</th>
+        <th class="p-4">Submission timestamp</th>
+        <th class="p-4">Clearance Status</th>
+        <th class="p-4 pr-6 text-right">Operations Command</th>
+      </tr>
+    </thead>
+    <tbody id="applications-table-wrapper"  class="divide-y divide-slate-100 font-medium text-slate-700">
+      
+        {% include "admin_panel/applications/_rows.html" %}
+      
+
+    </tbody>
+  </table>
+</div>
+{% include "admin_panel/applications/_pagination.html" %}

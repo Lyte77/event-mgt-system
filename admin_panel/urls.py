@@ -7,8 +7,10 @@ urlpatterns = [
    
     path("dashboard/", views.dashboard, name="dashboard"),
     path("applications/", views.applications, name="applications"),
+    path("applications/table/", views.applications_table, name="applications_table"),
     
     path("users/", views.users, name="users"),
+    path("users/table/", views.users_table, name="users_table"),
     path("events/", views.events, name="events"),
 
     

@@ -4,9 +4,11 @@ from django.shortcuts import render
 from accounts.models import User
 from admin_panel.models import ActivityLog
 from events.models import Event
-from accounts.models import OrganizerApplication
+from accounts.models import OrganizerApplication,UserProfile
 from django.utils import timezone
 from .decorators import admin_required
+from django.db.models import Q
+from django.core.paginator import Paginator
 
 
 
@@ -61,7 +63,7 @@ def applicant_poll(request):
     if oldest_application:
         oldest_age_days = (timezone.now() - oldest_application.created_at).days
     return render(request, "admin_panel/partials/applicant_poll.html", {"pending_count": pending_count,
-                                                                        "oldest_day_age":oldest_age_days})
+                                                                        "oldest_age_days": oldest_age_days})
 
 
 def activity_feed_items(request):
@@ -101,17 +103,165 @@ def alert_notification_banner(request):
                                                                     "oldest_day_age":oldest_age_days})
 
 def applications(request):
-    apps = OrganizerApplication.objects.select_related("user").all().order_by("-created_at")
-    if request.htmx :
-        return render(request, "admin_panel/applications/table.html", {"applications": apps})
-    return render(request, 'admin_panel/applications/list.html', {"applications": apps})
 
+    applications = (
+        OrganizerApplication.objects
+        .select_related("user", "user__profile")
+        .order_by("-created_at")
+    )
+
+    q = request.GET.get("q")
+
+    if q:
+        q = q.strip()
+        applications = applications.filter(
+            Q(user__email__icontains=q) |
+            Q(user__profile__full_name__icontains=q)
+        )
+
+    status = request.GET.get("status")
+
+    if status and status != "all":
+        applications = applications.filter(status=status)
+
+    paginator = Paginator(applications, 10)
+
+    page_number = request.GET.get("page")
+
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        "page_obj": page_obj,
+        "applications":applications,
+    }
+
+    
+    if request.htmx:
+            return render(
+                request,
+                "admin_panel/applications/_table.html",
+                context
+            )
+    return render(
+            request,
+            "admin_panel/applications/list.html",
+            context
+        )
+
+def applications_table(request):
+    applications = (    
+        OrganizerApplication.objects
+        .select_related("user", "user__profile")
+        .order_by("-created_at")
+    )
+
+    q = request.GET.get("q")
+
+    if q:
+        q = q.strip()
+        applications = applications.filter(
+            Q(user__email__icontains=q) |
+            Q(user__profile__full_name__icontains=q)
+        )
+
+    status = request.GET.get("status")
+
+    if status and status != "all":
+        applications = applications.filter(status=status)
+
+    return render(
+        request,
+        "admin_panel/applications/_rows.html",
+        {
+            "applications": applications,
+        },
+    )
 
 def users(request):
-    users = User.objects.select_related("profile").all()
+    q = request.GET.get("q", "").strip()
+    role = request.GET.get("role", "all").strip()
+    users = UserProfile.objects.select_related("user", "user__profile").all()
+   
+    if q:
+        q = q.strip()
+        users = users.filter(
+           Q(user__email__icontains=q) |
+           Q(user__profile__full_name__icontains=q)
+        )
+
+
+    if role and role != "all":
+        if role == "organizer":
+            users = users.filter(user__profile__is_organizer=True)
+            
+        elif role == "validator":
+            users = users.filter(user__profile__is_validator=True)
+            
+        elif role == "suspended":
+            # Using Django's built-in active user flag
+            users = users.filter(user__is_active=False)
+            
+        elif role == "attendee":
+            # Attendees are active users who are neither organizers nor validators
+            users = users.filter(
+                user__profile__is_organizer=False,
+                user__profile__is_validator=False,
+                user__is_active=True
+            )
+    context = {
+        "users": users,
+        "q": q,
+        "role": role,
+        
+    }
+
     if request.htmx:
-        return render(request, "admin_panel/users/table.html", {"users": users})
-    return render(request, 'admin_panel/users/list.html', {"users": users})
+        return render(request, "admin_panel/users/_table.html", context)
+    return render(request, 'admin_panel/users/list.html', context)
+     
+
+def users_table(request):
+    q = request.GET.get("q", "").strip()
+    role = request.GET.get("role", "all").strip()
+    users = UserProfile.objects.select_related("user", "user__profile").all()
+   
+    if q:
+        q = q.strip()
+        users = users.filter(
+           Q(user__email__icontains=q) |
+           Q(user__profile__full_name__icontains=q)
+        )
+
+
+    if role and role != "all":
+        if role == "organizer":
+            users = users.filter(user__profile__is_organizer=True)
+            
+        elif role == "validator":
+            users = users.filter(user__profile__is_validator=True)
+            
+        elif role == "suspended":
+            # Using Django's built-in active user flag
+            users = users.filter(user__is_active=False)
+            
+        elif role == "attendee":
+            # Attendees are active users who are neither organizers nor validators
+            users = users.filter(
+                user__profile__is_organizer=False,
+                user__profile__is_validator=False,
+                user__is_active=True
+            )
+    context = {
+        "users": users,
+        "q": q,
+        "role": role,
+        
+    }
+
+    return render(request, 'admin_panel/users/_rows.html', context)
+
+    
+
 
 def events(request):
     events = Event.objects.select_related("organizer").all()

@@ -2,10 +2,10 @@
         {% for app in pending_count %}
         <div class="p-4 flex items-center justify-between hover:bg-slate-50/30 transition-colors">
           <div class="flex items-center space-x-3.5">
-            <img class="w-9 h-9 rounded-full border border-slate-200 object-cover shrink-0" src="{{ app.avatar }}" />
+            <img class="w-9 h-9 rounded-full border border-slate-200 object-cover shrink-0" src="{{ app.user.profile.profile_pic.url }}" />
             <div>
-              <span class="font-bold text-sm text-slate-900 block leading-tight">{{ app.user. }}</span>
-              <span class="text-[11px] font-mono text-slate-400 block mt-0.5">{{ app.email }}</span>
+              <span class="font-bold text-sm text-slate-900 block leading-tight">{{ app.user.profile.full_name }}</span>
+              <span class="text-[11px] font-mono text-slate-400 block mt-0.5">{{ app.user.email }}</span>
             </div>
           </div>
           

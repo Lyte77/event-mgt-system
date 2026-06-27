@@ -1,0 +1,39 @@
+<div class="flex items-center justify-between mt-4">
+
+    <div>
+
+        Page {{ page_obj.number }}
+        of
+        {{ page_obj.paginator.num_pages }}
+
+    </div>
+
+    <div class="flex gap-2">
+
+        {% if page_obj.has_previous %}
+
+        <button
+            hx-get="{% url 'admin_panel:applications' %}?partial=table&page={{ page_obj.previous_page_number }}"
+            hx-target="#applications-table-wrapper"
+            class="px-3 py-2 border rounded"
+        >
+            Previous
+        </button>
+
+        {% endif %}
+
+        {% if page_obj.has_next %}
+
+        <button
+            hx-get="{% url 'admin_panel:applications' %}?partial=table&page={{ page_obj.next_page_number }}"
+            hx-target="#applications-table-wrapper"
+            class="px-3 py-2 border rounded"
+        >
+            Next
+        </button>
+
+        {% endif %}
+
+    </div>
+
+</div>
